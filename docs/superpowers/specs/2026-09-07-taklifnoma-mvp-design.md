@@ -47,6 +47,19 @@ o'z-o'ziga xizmat ko'rsatuvchi konstruktor** sifatida quriladi.
 - Ochiq sahifada til almashtirgich (struktura tayyor, kontent faqat `uz`).
 - Mehmonlar ro'yxatini import qilish, kengaytirilgan statistika/analitika.
 
+## 3a. Shablon va musiqa manbai
+
+- **Shablon:** original dizayn. momento.uz'dan faqat umumiy tarkib g'oyasi
+  (qanday bo'limlar bo'lishi kerakligi — hero, countdown, manzil, RSVP)
+  ilhom sifatida olindi; hech qanday HTML/CSS/rasm/animatsiya fayli
+  ko'chirilmaydi yoki ulardan nusxalanmaydi. Vizual dizayn implementatsiya
+  bosqichida frontend-design yondashuvi bilan noldan yaratiladi.
+- **Musiqa:** royalty-free kutubxonalardan (masalan Pixabay Music, YouTube
+  Audio Library) 3-5 ta instrumental trek tanlanadi va loyiha ichida
+  saqlanadi. Har bir trek litsenziya turi/manba havolasi bilan birga
+  `constants/music.ts` da ro'yxatlanadi — kelajakda tekshirish/almashtirish
+  oson bo'lishi uchun.
+
 ## 4. Arxitektura
 
 Monorepo, 3 ta ishga tushiriladigan komponent + umumiy backend:
