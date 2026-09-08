@@ -1,0 +1,41 @@
+import { describe, expect, it } from "vitest";
+import { createI18n } from "../../../src/i18n/i18n.js";
+import { renderInvitationPage } from "../../../src/templates/render-page.js";
+import { renderNotFoundPage } from "../../../src/templates/render-not-found.js";
+import type { PublicInvitationDto } from "../../../src/services/backend-api-client.js";
+
+const i18n = createI18n();
+const t = i18n.t.bind(i18n);
+
+const invitation: PublicInvitationDto = {
+  id: "inv-1",
+  slug: "ulugbek-malika",
+  groomName: "Ulug'bek",
+  brideName: "Malika",
+  eventDateTime: "2026-11-11T17:00:00.000Z",
+  venueName: "Baxtiyor restorani",
+  venueAddress: "Toshkent",
+  mapUrl: null,
+  greetingText: null,
+  musicTrackId: "romantic-piano",
+};
+
+describe("renderInvitationPage", () => {
+  it("includes an escaped title, all sections, and the inline client script", () => {
+    const html = renderInvitationPage(invitation, t);
+
+    expect(html).toContain("<title>Ulug&#39;bek &amp; Malika");
+    expect(html).toContain('class="hero"');
+    expect(html).toContain('class="countdown"');
+    expect(html).toContain('class="venue"');
+    expect(html).toContain('data-rsvp-form');
+    expect(html).toContain("data-music-toggle");
+    expect(html).toContain(JSON.stringify("/ulugbek-malika/rsvp"));
+  });
+});
+
+describe("renderNotFoundPage", () => {
+  it("renders the not-found title", () => {
+    expect(renderNotFoundPage(t)).toContain("Taklifnoma topilmadi");
+  });
+});
