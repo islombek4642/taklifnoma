@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+backups/
 
 # Local ad-hoc scripts and their output — never committed
 momento_audit*.sh
