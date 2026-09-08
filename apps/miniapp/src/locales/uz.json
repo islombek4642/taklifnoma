@@ -1,0 +1,66 @@
+{
+  "tabs": { "home": "Bosh sahifa", "guests": "Mehmonlar", "settings": "Sozlamalar" },
+  "home": {
+    "loading": "Yuklanmoqda...",
+    "emptyTitle": "Hali taklifnomangiz yo'q",
+    "emptySubtitle": "Bir necha daqiqada o'z to'y taklifnomangizni yarating",
+    "createButton": "Taklifnoma yaratish",
+    "editButton": "Tahrirlash",
+    "viewButton": "Ko'rish",
+    "shareButton": "Ulashish"
+  },
+  "builder": {
+    "steps": {
+      "names": "Ism-familiya",
+      "dateTime": "Sana va vaqt",
+      "venue": "To'y zali",
+      "greeting": "Tabrik matni",
+      "music": "Fon musiqasi"
+    },
+    "fields": {
+      "groomName": "Kuyov ismi",
+      "brideName": "Kelin ismi",
+      "eventDate": "Sana",
+      "eventTime": "Vaqt",
+      "venueName": "To'y zali nomi",
+      "venueAddress": "Manzil",
+      "mapUrl": "Xarita havolasi (ixtiyoriy)",
+      "greetingText": "Tabrik matni (ixtiyoriy)",
+      "musicTrack": "Musiqa tanlang"
+    },
+    "next": "Keyingi",
+    "back": "Orqaga",
+    "save": "Saqlash",
+    "update": "Yangilash"
+  },
+  "result": {
+    "title": "Taklifnoma tayyor!",
+    "copyLink": "Havolani nusxalash",
+    "copied": "Nusxalandi",
+    "share": "Ulashish",
+    "view": "Ko'rish",
+    "backHome": "Bosh sahifaga"
+  },
+  "guests": {
+    "loading": "Yuklanmoqda...",
+    "summary": "{{coming}} kishi keladi, {{notComing}} kishi kelmaydi",
+    "empty": "Hali hech kim javob bermagan",
+    "comingLabel": "Keladi",
+    "notComingLabel": "Kelmaydi"
+  },
+  "settings": {
+    "help": "Yordam/Aloqa",
+    "helpText": "Savol yoki takliflaringiz bo'lsa, @taklifnoma_support bilan bog'laning.",
+    "deleteButton": "Taklifnomani o'chirish",
+    "deleteConfirm": "Rostdan ham taklifnomangizni o'chirmoqchimisiz? Bu amalni bekor qilib bo'lmaydi.",
+    "deleteConfirmYes": "Ha, o'chirish",
+    "deleteConfirmNo": "Bekor qilish"
+  },
+  "music": {
+    "romanticPiano": "Romantik pianino",
+    "gentleStrings": "Yumshoq torli asboblar"
+  },
+  "common": {
+    "errorGeneric": "Xatolik yuz berdi. Qaytadan urinib ko'ring."
+  }
+}
