@@ -930,7 +930,10 @@ describe("renderHeroSection", () => {
   });
 
   it("falls back to the default greeting when greetingText is null", () => {
-    expect(renderHeroSection(baseInvitation, t)).toContain("Sizni to'y marosimimizga taklif qilamiz!");
+    // escapeHtml runs on the default greeting too (defense in depth, not
+    // just user input), so the apostrophe comes out as &#39; here — a
+    // browser still renders it as ' — assert the escaped form.
+    expect(renderHeroSection(baseInvitation, t)).toContain("Sizni to&#39;y marosimimizga taklif qilamiz!");
   });
 });
 

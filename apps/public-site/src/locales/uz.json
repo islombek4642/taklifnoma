@@ -1,0 +1,18 @@
+{
+  "meta": { "titleSuffix": "to'y taklifnomasi" },
+  "hero": { "defaultGreeting": "Sizni to'y marosimimizga taklif qilamiz!" },
+  "countdown": { "days": "kun", "hours": "soat", "minutes": "daqiqa", "seconds": "soniya" },
+  "venue": { "title": "To'y zali", "mapButton": "Xaritada ko'rish" },
+  "rsvp": {
+    "title": "Ishtirokingizni tasdiqlang",
+    "namePlaceholder": "Ismingiz",
+    "comingButton": "Kelaman",
+    "notComingButton": "Kelolmayman",
+    "thankYouComing": "Rahmat! Sizni kutamiz.",
+    "thankYouNotComing": "Rahmat, javobingiz uchun.",
+    "errorGeneric": "Xatolik yuz berdi. Qaytadan urinib ko'ring.",
+    "errorNameRequired": "Iltimos, ismingizni kiriting."
+  },
+  "music": { "toggleLabel": "Musiqa" },
+  "notFound": { "title": "Taklifnoma topilmadi", "subtitle": "Havola noto'g'ri yoki taklifnoma o'chirilgan bo'lishi mumkin." }
+}
