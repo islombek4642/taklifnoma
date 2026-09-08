@@ -193,16 +193,20 @@ backend/
 ```json
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
-    "skipLibCheck": true,
-    "noEmit": true
+    "skipLibCheck": true
   },
   "include": ["vite.config.ts", "vitest.config.ts"]
 }
 ```
+
+`composite: true` is required here because the root `tsconfig.json`
+references this project (`tsc -b` errors otherwise with "must have setting
+\"composite\": true"); a composite project also can't set `noEmit`.
 
 - [ ] **Step 4: Create `apps/miniapp/vite.config.ts`**
 
@@ -233,10 +237,19 @@ export default defineConfig({
 
 - [ ] **Step 6: Create `apps/miniapp/.gitignore`**
 
+The composite `tsconfig.node.json` build (required by Step 3 above) emits
+`.tsbuildinfo` files and compiled `vite.config.js`/`vitest.config.js` into
+the project root — ignore those too, not just `dist/`.
+
 ```
 node_modules/
 dist/
 .env
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+vitest.config.js
+vitest.config.d.ts
 ```
 
 - [ ] **Step 7: Create `apps/miniapp/index.html`**
