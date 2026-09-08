@@ -39,4 +39,20 @@ describe("loadEnvConfig", () => {
 
     expect(loadEnvConfig().port).toBe(4000);
   });
+
+  it("defaults contentDir to a local content/ folder when CONTENT_DIR is not set", () => {
+    process.env.TELEGRAM_BOT_TOKEN = "test-token";
+    process.env.MINIAPP_ORIGIN = "https://app.example.com";
+    delete process.env.CONTENT_DIR;
+
+    expect(loadEnvConfig().contentDir.endsWith("content")).toBe(true);
+  });
+
+  it("uses CONTENT_DIR when set", () => {
+    process.env.TELEGRAM_BOT_TOKEN = "test-token";
+    process.env.MINIAPP_ORIGIN = "https://app.example.com";
+    process.env.CONTENT_DIR = "/app/data/content";
+
+    expect(loadEnvConfig().contentDir).toBe("/app/data/content");
+  });
 });

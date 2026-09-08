@@ -23,6 +23,7 @@ RUN npx prisma generate
 
 COPY tsconfig.json ./
 COPY src ./src
+COPY content-seed ./content-seed
 RUN npm run build
 
 # --- Stage 2: runtime ---

@@ -3,6 +3,8 @@ import { buildApp } from "../../../src/presentation/app.js";
 import { InMemoryInvitationRepository } from "../../helpers/in-memory-invitation-repository.js";
 import { InMemoryRsvpRepository } from "../../helpers/in-memory-rsvp-repository.js";
 import { FakeOwnerNotifier } from "../../helpers/fake-owner-notifier.js";
+import { InMemoryTemplateRegistry } from "../../helpers/in-memory-template-registry.js";
+import { InMemoryMusicRegistry } from "../../helpers/in-memory-music-registry.js";
 
 const baseInvitation = {
   groomName: "Ulug'bek",
@@ -10,6 +12,7 @@ const baseInvitation = {
   eventDateTime: new Date("2026-11-11T17:00:00.000Z"),
   venueName: "Baxtiyor restorani",
   venueAddress: "Toshkent viloyati",
+  templateId: "classic",
   musicTrackId: "romantic-piano",
   slug: "ulugbek-malika",
   ownerTelegramId: 1n,
@@ -21,6 +24,9 @@ function buildTestApp(invitationRepository: InMemoryInvitationRepository, notifi
     invitationRepository,
     rsvpRepository: new InMemoryRsvpRepository(),
     ownerNotifier: notifier,
+    templateRegistry: new InMemoryTemplateRegistry(),
+    musicRegistry: new InMemoryMusicRegistry(),
+    contentDir: "/tmp/taklifnoma-test-content",
     botToken: "test-bot-token",
   });
 }

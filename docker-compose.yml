@@ -7,6 +7,10 @@ services:
       - DATABASE_URL=file:/app/data/prod.db
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - PORT=3000
+      # Templates/music live here, on the same persistent volume as the DB
+      # (content/templates/<id>, content/music/<id>) — an admin upload flow
+      # will write new folders into this same path later.
+      - CONTENT_DIR=/app/data/content
       # Mini App calls this API cross-origin from its own domain — needs CORS.
       - MINIAPP_ORIGIN=https://${MINIAPP_DOMAIN}
       - VIRTUAL_HOST=${API_DOMAIN}

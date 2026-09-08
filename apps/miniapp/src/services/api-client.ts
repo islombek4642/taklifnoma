@@ -12,6 +12,7 @@ export interface InvitationDto {
   venueAddress: string;
   mapUrl: string | null;
   greetingText: string | null;
+  templateId: string;
   musicTrackId: string;
   createdAt: string;
   updatedAt: string;
@@ -32,7 +33,20 @@ export interface InvitationInputDto {
   venueAddress: string;
   mapUrl?: string;
   greetingText?: string;
+  templateId: string;
   musicTrackId: string;
+}
+
+export interface TemplateDto {
+  id: string;
+  name: string;
+  accentColor: string;
+}
+
+export interface MusicTrackDto {
+  id: string;
+  title: string;
+  fileUrl: string;
 }
 
 export class ApiError extends Error {
@@ -92,6 +106,16 @@ export function createApiClient(baseUrl: string) {
       const response = await fetch(`${baseUrl}/api/invitations/me/guests`, { headers: authHeaders(initData) });
       if (response.status === 404) return null;
       return parseJsonOrThrow<GuestDto[]>(response);
+    },
+
+    async getTemplates(): Promise<TemplateDto[]> {
+      const response = await fetch(`${baseUrl}/api/templates`);
+      return parseJsonOrThrow<TemplateDto[]>(response);
+    },
+
+    async getMusicTracks(): Promise<MusicTrackDto[]> {
+      const response = await fetch(`${baseUrl}/api/music-tracks`);
+      return parseJsonOrThrow<MusicTrackDto[]>(response);
     },
   };
 }

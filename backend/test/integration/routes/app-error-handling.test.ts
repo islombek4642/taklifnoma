@@ -3,12 +3,17 @@ import { buildApp } from "../../../src/presentation/app.js";
 import { InMemoryInvitationRepository } from "../../helpers/in-memory-invitation-repository.js";
 import { InMemoryRsvpRepository } from "../../helpers/in-memory-rsvp-repository.js";
 import { FakeOwnerNotifier } from "../../helpers/fake-owner-notifier.js";
+import { InMemoryTemplateRegistry } from "../../helpers/in-memory-template-registry.js";
+import { InMemoryMusicRegistry } from "../../helpers/in-memory-music-registry.js";
 
 function buildTestApp() {
   return buildApp({
     invitationRepository: new InMemoryInvitationRepository(),
     rsvpRepository: new InMemoryRsvpRepository(),
     ownerNotifier: new FakeOwnerNotifier(),
+    templateRegistry: new InMemoryTemplateRegistry(),
+    musicRegistry: new InMemoryMusicRegistry(),
+    contentDir: "/tmp/taklifnoma-test-content",
     botToken: "test-bot-token",
   });
 }
@@ -19,6 +24,9 @@ describe("CORS", () => {
       invitationRepository: new InMemoryInvitationRepository(),
       rsvpRepository: new InMemoryRsvpRepository(),
       ownerNotifier: new FakeOwnerNotifier(),
+      templateRegistry: new InMemoryTemplateRegistry(),
+      musicRegistry: new InMemoryMusicRegistry(),
+      contentDir: "/tmp/taklifnoma-test-content",
       botToken: "test-bot-token",
       corsOrigin: "https://app.example.com",
     });

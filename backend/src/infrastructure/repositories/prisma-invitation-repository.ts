@@ -18,6 +18,7 @@ function toDomain(row: PrismaInvitationRow): Invitation {
     venueAddress: row.venueAddress,
     mapUrl: row.mapUrl ?? undefined,
     greetingText: row.greetingText ?? undefined,
+    templateId: row.templateId,
     musicTrackId: row.musicTrackId,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,

@@ -23,6 +23,7 @@ function toInvitationInput(body: Record<string, unknown>): InvitationInput {
     venueAddress: String(body.venueAddress ?? ""),
     mapUrl: readOptionalString(body.mapUrl),
     greetingText: readOptionalString(body.greetingText),
+    templateId: String(body.templateId ?? ""),
     musicTrackId: String(body.musicTrackId ?? ""),
   };
 }
@@ -36,6 +37,7 @@ function toPartialInvitationInput(body: Record<string, unknown>): Partial<Invita
   if ("venueAddress" in body) partial.venueAddress = String(body.venueAddress);
   if ("mapUrl" in body) partial.mapUrl = readOptionalString(body.mapUrl);
   if ("greetingText" in body) partial.greetingText = readOptionalString(body.greetingText);
+  if ("templateId" in body) partial.templateId = String(body.templateId);
   if ("musicTrackId" in body) partial.musicTrackId = String(body.musicTrackId);
   return partial;
 }

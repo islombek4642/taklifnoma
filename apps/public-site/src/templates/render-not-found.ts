@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import { INLINE_STYLES } from "./styles.js";
+import { FALLBACK_STYLE } from "../constants/fallback-style.js";
 
 export function renderNotFoundPage(t: TFunction): string {
   return `<!doctype html>
@@ -8,7 +8,7 @@ export function renderNotFoundPage(t: TFunction): string {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>${t("notFound.title")}</title>
-<style>${INLINE_STYLES}</style>
+<style>${FALLBACK_STYLE}</style>
 </head>
 <body>
 <section class="not-found">

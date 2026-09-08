@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Heart, MapPin, Music2, Pencil, Eye, Share2 } from "lucide-react";
-import { apiClient, type InvitationDto } from "../../services/api-client.js";
+import { apiClient, type InvitationDto, type MusicTrackDto } from "../../services/api-client.js";
 import { getInitData, shareInvitationLink } from "../../services/telegram.js";
 import { formatEventDateUz } from "../../utils/format-date.js";
 import { PUBLIC_SITE_BASE_URL } from "../../constants/config.js";
-import { MUSIC_TRACKS } from "../../constants/music-tracks.js";
 import { Button } from "../../components/Button.js";
 import { Card } from "../../components/Card.js";
 import { EmptyState } from "../../components/EmptyState.js";
@@ -15,13 +14,8 @@ import "./HomeScreen.css";
 type LoadState =
   | { status: "loading" }
   | { status: "empty" }
-  | { status: "ready"; invitation: InvitationDto }
+  | { status: "ready"; invitation: InvitationDto; musicTracks: MusicTrackDto[] }
   | { status: "error" };
-
-function musicTrackTitle(musicTrackId: string, fallback: (key: string) => string): string | undefined {
-  const track = MUSIC_TRACKS.find((candidate) => candidate.id === musicTrackId);
-  return track ? fallback(track.titleKey) : undefined;
-}
 
 export function HomeScreen() {
   const { t } = useTranslation();
@@ -32,9 +26,14 @@ export function HomeScreen() {
     let cancelled = false;
     apiClient
       .getMyInvitation(getInitData())
-      .then((invitation) => {
+      .then(async (invitation) => {
         if (cancelled) return;
-        setState(invitation ? { status: "ready", invitation } : { status: "empty" });
+        if (!invitation) {
+          setState({ status: "empty" });
+          return;
+        }
+        const musicTracks = await apiClient.getMusicTracks().catch(() => []);
+        if (!cancelled) setState({ status: "ready", invitation, musicTracks });
       })
       .catch(() => {
         if (!cancelled) setState({ status: "error" });
@@ -62,9 +61,9 @@ export function HomeScreen() {
     );
   }
 
-  const { invitation } = state;
+  const { invitation, musicTracks } = state;
   const publicUrl = `${PUBLIC_SITE_BASE_URL}/${invitation.slug}`;
-  const trackTitle = musicTrackTitle(invitation.musicTrackId, t);
+  const trackTitle = musicTracks.find((track) => track.id === invitation.musicTrackId)?.title;
 
   return (
     <div className="home-filled">

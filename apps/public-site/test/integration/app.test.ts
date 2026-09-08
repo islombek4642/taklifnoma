@@ -13,6 +13,7 @@ const invitation: PublicInvitationDto = {
   venueAddress: "Toshkent",
   mapUrl: null,
   greetingText: null,
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 
@@ -27,6 +28,17 @@ describe("GET /health", () => {
   });
 });
 
+describe("GET /media/music/:id/:file", () => {
+  it("proxies the audio bytes from the backend", async () => {
+    const app = buildApp({ backendApiClient: new FakeBackendApiClient() });
+
+    const response = await app.inject({ method: "GET", url: "/media/music/romantic-piano/track.wav" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toBe("audio/wav");
+  });
+});
+
 describe("GET /:slug", () => {
   it("renders the invitation page for a known slug", async () => {
     const backendApiClient = new FakeBackendApiClient();
@@ -38,6 +50,19 @@ describe("GET /:slug", () => {
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toContain("text/html");
     expect(response.body).toContain("Ulug&#39;bek");
+    expect(response.body).toContain("body { font-family: serif; }");
+    expect(response.body).toContain('src="/media/music/romantic-piano/track.wav"');
+  });
+
+  it("falls back to a default style when the invitation's template isn't registered", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    backendApiClient.seedInvitation({ ...invitation, templateId: "unknown-template" });
+    const app = buildApp({ backendApiClient });
+
+    const response = await app.inject({ method: "GET", url: "/ulugbek-malika" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toContain(".music-toggle");
   });
 
   it("returns 404 with the not-found page for an unknown slug", async () => {

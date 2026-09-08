@@ -7,14 +7,15 @@ import { DateTimeStep } from "./steps/DateTimeStep.js";
 import { VenueStep } from "./steps/VenueStep.js";
 import { GreetingStep } from "./steps/GreetingStep.js";
 import { MusicStep } from "./steps/MusicStep.js";
+import { TemplateStep } from "./steps/TemplateStep.js";
 import { TopBar } from "../../components/TopBar.js";
 import { ProgressSteps } from "../../components/ProgressSteps.js";
 import { Button } from "../../components/Button.js";
 import { BUILDER_STEP_COUNT } from "./builder-form.js";
 import "./BuilderScreen.css";
 
-const STEP_COMPONENTS = [NamesStep, DateTimeStep, VenueStep, GreetingStep, MusicStep];
-const STEP_KEYS = ["names", "dateTime", "venue", "greeting", "music"];
+const STEP_COMPONENTS = [NamesStep, DateTimeStep, VenueStep, GreetingStep, MusicStep, TemplateStep];
+const STEP_KEYS = ["names", "dateTime", "venue", "greeting", "music", "template"];
 
 export function BuilderScreen() {
   const { t } = useTranslation();

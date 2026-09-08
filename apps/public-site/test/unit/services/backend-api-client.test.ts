@@ -52,4 +52,50 @@ describe("createBackendApiClient", () => {
       RsvpSubmissionError,
     );
   });
+
+  it("fetches templates from the backend", async () => {
+    const templates = [{ id: "classic", name: "Klassik", accentColor: "#b45d52", styleCss: "body{}" }];
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => templates }));
+
+    const client = createBackendApiClient(BASE_URL);
+
+    expect(await client.getTemplates()).toEqual(templates);
+  });
+
+  it("returns an empty template list when the backend request fails", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500, json: async () => ({}) }));
+
+    const client = createBackendApiClient(BASE_URL);
+
+    expect(await client.getTemplates()).toEqual([]);
+  });
+
+  it("fetches music tracks from the backend", async () => {
+    const tracks = [{ id: "romantic-piano", title: "Romantik pianino", fileUrl: "/media/music/romantic-piano/track.wav" }];
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => tracks }));
+
+    const client = createBackendApiClient(BASE_URL);
+
+    expect(await client.getMusicTracks()).toEqual(tracks);
+  });
+
+  it("fetches media bytes with their content type", async () => {
+    const body = new ArrayBuffer(4);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, headers: { get: () => "audio/wav" }, arrayBuffer: async () => body }),
+    );
+
+    const client = createBackendApiClient(BASE_URL);
+
+    expect(await client.fetchMedia("/media/music/romantic-piano/track.wav")).toEqual({ contentType: "audio/wav", body });
+  });
+
+  it("returns null for media when the backend request fails", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404 }));
+
+    const client = createBackendApiClient(BASE_URL);
+
+    expect(await client.fetchMedia("/media/music/unknown/track.wav")).toBeNull();
+  });
 });

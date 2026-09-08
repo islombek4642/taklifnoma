@@ -27,6 +27,11 @@ describe("isStepValid", () => {
     expect(isStepValid(4, INITIAL_BUILDER_FORM_STATE)).toBe(false);
     expect(isStepValid(4, { ...INITIAL_BUILDER_FORM_STATE, musicTrackId: "romantic-piano" })).toBe(true);
   });
+
+  it("requires a template on step 5", () => {
+    expect(isStepValid(5, INITIAL_BUILDER_FORM_STATE)).toBe(false);
+    expect(isStepValid(5, { ...INITIAL_BUILDER_FORM_STATE, templateId: "classic" })).toBe(true);
+  });
 });
 
 describe("toInvitationInput", () => {
@@ -40,6 +45,7 @@ describe("toInvitationInput", () => {
       venueName: "Baxtiyor restorani",
       venueAddress: "Toshkent",
       musicTrackId: "romantic-piano",
+      templateId: "classic",
     };
 
     const input = toInvitationInput(state);
@@ -58,6 +64,7 @@ describe("toInvitationInput", () => {
       venueName: "V",
       venueAddress: "Addr",
       musicTrackId: "romantic-piano",
+      templateId: "classic",
       mapUrl: "  ",
       greetingText: "  ",
     };
@@ -80,6 +87,7 @@ describe("fromInvitation", () => {
       mapUrl: null,
       greetingText: null,
       musicTrackId: "romantic-piano",
+      templateId: "classic",
     } as InvitationDto;
 
     const state = fromInvitation(invitation);

@@ -4,6 +4,7 @@ import { createI18n } from "./i18n/i18n.js";
 import { renderInvitationPage } from "./templates/render-page.js";
 import { renderNotFoundPage } from "./templates/render-not-found.js";
 import { RsvpSubmissionError } from "./services/backend-api-client.js";
+import { FALLBACK_STYLE } from "./constants/fallback-style.js";
 
 export function buildApp(deps: AppDependencies): FastifyInstance {
   const app = Fastify({ logger: false });
@@ -12,6 +13,23 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
 
   app.get("/health", async (_request, reply) => {
     reply.send({ status: "ok" });
+  });
+
+  // Proxies music audio from the backend so the browser only ever talks
+  // to this site's own domain (same reason RSVP is proxied below, rather
+  // than exposed cross-origin) — the path shape matches the backend's own
+  // /media/music/:id/:file route exactly, so a track's fileUrl from
+  // GET /api/music-tracks can be used as-is for both.
+  app.get("/media/music/:id/:file", async (request, reply) => {
+    const { id, file } = request.params as { id: string; file: string };
+    const media = await deps.backendApiClient.fetchMedia(`/media/music/${encodeURIComponent(id)}/${encodeURIComponent(file)}`);
+
+    if (!media) {
+      reply.code(404).send();
+      return;
+    }
+
+    reply.type(media.contentType).send(Buffer.from(media.body));
   });
 
   app.get("/:slug", async (request, reply) => {
@@ -23,7 +41,14 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
       return;
     }
 
-    reply.type("text/html").send(renderInvitationPage(invitation, t));
+    const [templates, musicTracks] = await Promise.all([
+      deps.backendApiClient.getTemplates(),
+      deps.backendApiClient.getMusicTracks(),
+    ]);
+    const styleCss = templates.find((template) => template.id === invitation.templateId)?.styleCss ?? FALLBACK_STYLE;
+    const musicFileUrl = musicTracks.find((track) => track.id === invitation.musicTrackId)?.fileUrl;
+
+    reply.type("text/html").send(renderInvitationPage(invitation, t, styleCss, musicFileUrl));
   });
 
   app.post("/:slug/rsvp", async (request, reply) => {

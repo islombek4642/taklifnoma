@@ -3,6 +3,8 @@ import { buildApp } from "../../../src/presentation/app.js";
 import { InMemoryInvitationRepository } from "../../helpers/in-memory-invitation-repository.js";
 import { InMemoryRsvpRepository } from "../../helpers/in-memory-rsvp-repository.js";
 import { FakeOwnerNotifier } from "../../helpers/fake-owner-notifier.js";
+import { InMemoryTemplateRegistry } from "../../helpers/in-memory-template-registry.js";
+import { InMemoryMusicRegistry } from "../../helpers/in-memory-music-registry.js";
 import { signInitData } from "../../helpers/sign-init-data.js";
 
 const BOT_TOKEN = "test-bot-token";
@@ -20,6 +22,9 @@ function buildTestApp() {
     invitationRepository: new InMemoryInvitationRepository(),
     rsvpRepository: new InMemoryRsvpRepository(),
     ownerNotifier: new FakeOwnerNotifier(),
+    templateRegistry: new InMemoryTemplateRegistry(),
+    musicRegistry: new InMemoryMusicRegistry(),
+    contentDir: "/tmp/taklifnoma-test-content",
     botToken: BOT_TOKEN,
   });
 }
@@ -30,6 +35,7 @@ const validPayload = {
   eventDateTime: "2026-11-11T17:00:00.000Z",
   venueName: "Baxtiyor restorani",
   venueAddress: "Toshkent viloyati",
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 

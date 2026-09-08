@@ -9,6 +9,7 @@ const validInput = {
   eventDateTime: new Date("2026-11-11T17:00:00.000Z"),
   venueName: "Baxtiyor restorani",
   venueAddress: "Toshkent viloyati",
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 

@@ -17,20 +17,29 @@ const invitation: PublicInvitationDto = {
   venueAddress: "Toshkent",
   mapUrl: null,
   greetingText: null,
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 
 describe("renderInvitationPage", () => {
-  it("includes an escaped title, all sections, and the inline client script", () => {
-    const html = renderInvitationPage(invitation, t);
+  it("includes an escaped title, the given style, all sections, and the inline client script", () => {
+    const html = renderInvitationPage(invitation, t, "body { color: blue; }", "/media/music/romantic-piano/track.wav");
 
     expect(html).toContain("<title>Ulug&#39;bek &amp; Malika");
+    expect(html).toContain("<style>body { color: blue; }</style>");
     expect(html).toContain('class="hero"');
     expect(html).toContain('class="countdown"');
     expect(html).toContain('class="venue"');
     expect(html).toContain('data-rsvp-form');
     expect(html).toContain("data-music-toggle");
     expect(html).toContain(JSON.stringify("/ulugbek-malika/rsvp"));
+  });
+
+  it("omits the music section when no track file url is given", () => {
+    const html = renderInvitationPage(invitation, t, "", undefined);
+
+    expect(html).not.toContain("<audio");
+    expect(html).not.toContain('<button class="music-toggle"');
   });
 });
 
