@@ -9,6 +9,10 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
 
   app.setErrorHandler(handleError);
 
+  app.get("/health", async (_request, reply) => {
+    reply.send({ status: "ok" });
+  });
+
   app.register(async (instance) => registerInvitationsRoutes(instance, deps));
   app.register(async (instance) => registerPublicInvitationsRoutes(instance, deps));
 

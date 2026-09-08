@@ -16,6 +16,17 @@ const invitation: PublicInvitationDto = {
   musicTrackId: "romantic-piano",
 };
 
+describe("GET /health", () => {
+  it("returns 200 with an ok status, for Docker healthchecks, without falling through to the :slug route", async () => {
+    const app = buildApp({ backendApiClient: new FakeBackendApiClient() });
+
+    const response = await app.inject({ method: "GET", url: "/health" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({ status: "ok" });
+  });
+});
+
 describe("GET /:slug", () => {
   it("renders the invitation page for a known slug", async () => {
     const backendApiClient = new FakeBackendApiClient();

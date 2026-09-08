@@ -13,6 +13,17 @@ function buildTestApp() {
   });
 }
 
+describe("GET /health", () => {
+  it("returns 200 with an ok status, for Docker healthchecks", async () => {
+    const app = buildTestApp();
+
+    const response = await app.inject({ method: "GET", url: "/health" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({ status: "ok" });
+  });
+});
+
 describe("app error handling", () => {
   it("returns 401 when the Authorization header is missing on a protected route", async () => {
     const app = buildTestApp();
