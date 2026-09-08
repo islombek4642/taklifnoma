@@ -2,6 +2,16 @@
 FROM node:20-slim AS builder
 WORKDIR /app
 
+# openssl must be present here, before `prisma generate` runs: Prisma
+# probes the local OpenSSL version to pick the "native" engine binary, and
+# without it present it silently falls back to a stale default
+# (debian-openssl-1.1.x) instead of matching what the runtime stage
+# actually has (Debian bookworm's openssl 3.0.x) — the schema's explicit
+# binaryTargets is the real fix (guarantees the right engine ships
+# regardless of "native" detection), this just keeps "native" accurate too.
+RUN apt-get update && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY package.json package-lock.json ./
 RUN npm ci
 
