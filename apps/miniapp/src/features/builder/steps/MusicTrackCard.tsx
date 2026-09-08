@@ -23,7 +23,7 @@ export function MusicTrackCard({ track, title, selected, onSelect }: MusicTrackC
     if (playing) {
       audio.pause();
     } else {
-      void audio.play();
+      audio.play().catch(() => setPlaying(false));
     }
   }
 

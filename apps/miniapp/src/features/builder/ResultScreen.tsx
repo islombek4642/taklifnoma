@@ -31,7 +31,7 @@ export function ResultScreen() {
   }
 
   return (
-    <div className="result-screen">
+    <div className="result-screen page-transition">
       <div className="result-screen__check">
         <Check size={34} strokeWidth={3} />
       </div>
