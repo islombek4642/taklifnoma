@@ -24,7 +24,12 @@ FROM nginx:1.27-alpine AS runtime
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# 127.0.0.1, not "localhost": BusyBox's wget resolves "localhost" to ::1
+# first per /etc/hosts and gives up immediately ("Connection refused")
+# rather than falling back to IPv4 when the host has no IPv6 route — nginx
+# itself is fine (external traffic through the docker network works), only
+# this in-container loopback check needs the explicit address.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget -q -O- http://localhost/health || exit 1
+    CMD wget -q -O- http://127.0.0.1/health || exit 1
 
 EXPOSE 80
