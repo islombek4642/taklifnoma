@@ -113,7 +113,7 @@ check_health_wget() {
 
 check_health_curl backend "http://localhost:3000/health"
 check_health_curl public-site "http://localhost:4000/health"
-check_health_wget miniapp "http://localhost/health"
+check_health_wget miniapp "http://127.0.0.1/health"
 
 if sudo docker compose ps bot --format '{{.Status}}' | grep -qi "healthy\|Up"; then
   echo -e "${GREEN}bot is running.${NC}"
