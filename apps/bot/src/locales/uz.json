@@ -2,5 +2,12 @@
   "start": {
     "welcome": "Assalomu alaykum! Taklifnoma botiga xush kelibsiz. Quyidagi tugma orqali o'zingizning to'y taklifnomangizni yarating.",
     "openApp": "Taklifnoma yaratish"
+  },
+  "help": {
+    "text": "Taklifnoma bot yordami:\n\n/start — botni ishga tushirish va Mini App'ni ochish\n/help — ushbu yordam xabari\n\nTo'y taklifnomangizni yaratish uchun Mini App ichida \"Taklifnoma yaratish\" tugmasini bosing va bosqichma-bosqich ma'lumotlarni kiriting. Savol yoki takliflaringiz bo'lsa, @taklifnoma_support bilan bog'laning."
+  },
+  "commands": {
+    "start": "Botni ishga tushirish",
+    "help": "Yordam olish"
   }
 }

@@ -36,7 +36,7 @@ export function BuilderScreen() {
   }
 
   return (
-    <div className="builder-screen">
+    <div className="builder-screen page-transition">
       <div className="builder-screen__header">
         <TopBar
           title={t(`builder.steps.${STEP_KEYS[step]}`)}
@@ -47,7 +47,7 @@ export function BuilderScreen() {
         <ProgressSteps total={BUILDER_STEP_COUNT} current={step} />
       </div>
 
-      <div className="builder-screen__body">
+      <div key={step} className="builder-screen__body page-transition">
         {StepComponent ? <StepComponent form={form} onChange={updateField} /> : null}
         {error ? <p className="builder-screen__error">{t("common.errorGeneric")}</p> : null}
       </div>
