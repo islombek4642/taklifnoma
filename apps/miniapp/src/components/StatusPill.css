@@ -1,0 +1,18 @@
+.status-pill {
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.status-pill--success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.status-pill--decline {
+  background: var(--color-decline-soft);
+  color: var(--color-decline);
+}

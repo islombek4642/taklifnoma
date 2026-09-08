@@ -1,0 +1,10 @@
+.app-layout {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+.app-content {
+  padding: var(--space-5) var(--page-inline-padding)
+    calc(var(--bottom-nav-height) + var(--bottom-nav-gap) + var(--space-5));
+}

@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import "./styles/tokens.css";
+import "./styles/base.css";
 import "./i18n/i18n.js";
 import { initTelegramWebApp } from "./services/telegram.js";
 import App from "./App.js";

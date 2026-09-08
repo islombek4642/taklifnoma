@@ -1,0 +1,75 @@
+.home-status-text {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding-top: var(--space-8);
+}
+
+.home-filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.invite-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--color-surface), var(--color-surface-alt));
+  text-align: center;
+  overflow: hidden;
+}
+
+.invite-card__names {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+}
+
+.invite-card__amp {
+  color: var(--color-accent);
+  font-style: italic;
+  padding: 0 var(--space-1);
+}
+
+.invite-card__date {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-5);
+}
+
+.invite-card__divider {
+  width: 40px;
+  height: 1px;
+  background: var(--color-border);
+  margin: 0 auto var(--space-5);
+}
+
+.invite-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  text-align: left;
+  margin-bottom: var(--space-2);
+}
+
+.invite-card__row svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-accent-deep);
+}
+
+.invite-card__row b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.home-filled__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.home-filled__actions > * {
+  flex: 1;
+}

@@ -1,0 +1,16 @@
+.progress-steps {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-4) 0 var(--space-6);
+}
+
+.progress-steps__segment {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+}
+
+.progress-steps__segment--done {
+  background: var(--color-accent);
+}
