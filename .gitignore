@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+
+# Local ad-hoc scripts and their output — never committed
+momento_audit*.sh
+momento_audit_*/
+momento_download*.sh
+momento_download_*/
