@@ -68,7 +68,15 @@ describe("createApiClient", () => {
     const guests = await client.listGuests("init-data");
 
     expect(guests).toHaveLength(1);
-    expect(guests[0]?.guestName).toBe("Aziza");
+    expect(guests?.[0]?.guestName).toBe("Aziza");
+  });
+
+  it("returns null from listGuests on a 404 (owner has no invitation yet)", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404, json: async () => ({}) }));
+
+    const client = createApiClient(BASE_URL);
+
+    expect(await client.listGuests("init-data")).toBeNull();
   });
 
   it("deletes the invitation", async () => {

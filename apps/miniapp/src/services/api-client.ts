@@ -88,8 +88,9 @@ export function createApiClient(baseUrl: string) {
       if (!response.ok) throw new ApiError(response.status, await response.json().catch(() => undefined));
     },
 
-    async listGuests(initData: string): Promise<GuestDto[]> {
+    async listGuests(initData: string): Promise<GuestDto[] | null> {
       const response = await fetch(`${baseUrl}/api/invitations/me/guests`, { headers: authHeaders(initData) });
+      if (response.status === 404) return null;
       return parseJsonOrThrow<GuestDto[]>(response);
     },
   };

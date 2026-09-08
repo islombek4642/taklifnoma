@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RSVP_STATUS } from "../../constants/rsvp-status.js";
 import { apiClient, type GuestDto } from "../../services/api-client.js";
 import { getInitData } from "../../services/telegram.js";
 
-type LoadState = { status: "loading" } | { status: "ready"; guests: GuestDto[] } | { status: "error" };
+type LoadState =
+  | { status: "loading" }
+  | { status: "no-invitation" }
+  | { status: "ready"; guests: GuestDto[] }
+  | { status: "error" };
 
 export function GuestsScreen() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [state, setState] = useState<LoadState>({ status: "loading" });
 
   useEffect(() => {
@@ -15,7 +21,8 @@ export function GuestsScreen() {
     apiClient
       .listGuests(getInitData())
       .then((guests) => {
-        if (!cancelled) setState({ status: "ready", guests });
+        if (cancelled) return;
+        setState(guests === null ? { status: "no-invitation" } : { status: "ready", guests });
       })
       .catch(() => {
         if (!cancelled) setState({ status: "error" });
@@ -27,6 +34,15 @@ export function GuestsScreen() {
 
   if (state.status === "loading") return <p>{t("guests.loading")}</p>;
   if (state.status === "error") return <p>{t("common.errorGeneric")}</p>;
+
+  if (state.status === "no-invitation") {
+    return (
+      <div>
+        <p>{t("guests.noInvitation")}</p>
+        <button onClick={() => navigate("/builder")}>{t("home.createButton")}</button>
+      </div>
+    );
+  }
 
   const { guests } = state;
   if (guests.length === 0) return <p>{t("guests.empty")}</p>;
