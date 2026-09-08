@@ -10,6 +10,10 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
   const i18n = createI18n();
   const t = i18n.t.bind(i18n);
 
+  app.get("/health", async (_request, reply) => {
+    reply.send({ status: "ok" });
+  });
+
   app.get("/:slug", async (request, reply) => {
     const { slug } = request.params as { slug: string };
     const invitation = await deps.backendApiClient.getInvitationBySlug(slug);
