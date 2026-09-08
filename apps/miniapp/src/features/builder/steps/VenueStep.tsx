@@ -1,4 +1,7 @@
 import { useTranslation } from "react-i18next";
+import { MapPin } from "lucide-react";
+import { Input } from "../../../components/Input.js";
+import { TextArea } from "../../../components/TextArea.js";
 import type { BuilderFormState } from "../builder-form.js";
 
 interface Props {
@@ -10,18 +13,22 @@ export function VenueStep({ form, onChange }: Props) {
   const { t } = useTranslation();
   return (
     <div>
-      <label>
-        {t("builder.fields.venueName")}
-        <input value={form.venueName} onChange={(e) => onChange("venueName", e.target.value)} />
-      </label>
-      <label>
-        {t("builder.fields.venueAddress")}
-        <input value={form.venueAddress} onChange={(e) => onChange("venueAddress", e.target.value)} />
-      </label>
-      <label>
-        {t("builder.fields.mapUrl")}
-        <input value={form.mapUrl} onChange={(e) => onChange("mapUrl", e.target.value)} />
-      </label>
+      <Input
+        label={t("builder.fields.venueName")}
+        value={form.venueName}
+        onChange={(e) => onChange("venueName", e.target.value)}
+      />
+      <TextArea
+        label={t("builder.fields.venueAddress")}
+        value={form.venueAddress}
+        onChange={(e) => onChange("venueAddress", e.target.value)}
+      />
+      <Input
+        label={t("builder.fields.mapUrl")}
+        icon={<MapPin size={16} strokeWidth={1.5} />}
+        value={form.mapUrl}
+        onChange={(e) => onChange("mapUrl", e.target.value)}
+      />
     </div>
   );
 }

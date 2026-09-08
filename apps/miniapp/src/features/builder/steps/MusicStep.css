@@ -1,0 +1,6 @@
+.music-step__hint {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-5);
+  line-height: 1.5;
+}

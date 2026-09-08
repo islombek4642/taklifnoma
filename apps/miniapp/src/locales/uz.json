@@ -10,6 +10,7 @@
     "shareButton": "Ulashish"
   },
   "builder": {
+    "stepOf": "{{current}}-QADAM / {{total}}",
     "steps": {
       "names": "Ism-familiya",
       "dateTime": "Sana va vaqt",
@@ -43,7 +44,6 @@
   },
   "guests": {
     "loading": "Yuklanmoqda...",
-    "summary": "{{coming}} kishi keladi, {{notComing}} kishi kelmaydi",
     "empty": "Hali hech kim javob bermagan",
     "noInvitation": "Mehmonlarni ko'rish uchun avval taklifnoma yarating",
     "comingLabel": "Keladi",
@@ -52,6 +52,7 @@
   "settings": {
     "help": "Yordam/Aloqa",
     "helpText": "Savol yoki takliflaringiz bo'lsa, @taklifnoma_support bilan bog'laning.",
+    "dangerZone": "Xavfli hudud",
     "deleteButton": "Taklifnomani o'chirish",
     "deleteConfirm": "Rostdan ham taklifnomangizni o'chirmoqchimisiz? Bu amalni bekor qilib bo'lmaydi.",
     "deleteConfirmYes": "Ha, o'chirish",

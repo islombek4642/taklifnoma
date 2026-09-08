@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Input } from "../../../components/Input.js";
 import type { BuilderFormState } from "../builder-form.js";
 
 interface Props {
@@ -10,14 +11,16 @@ export function NamesStep({ form, onChange }: Props) {
   const { t } = useTranslation();
   return (
     <div>
-      <label>
-        {t("builder.fields.groomName")}
-        <input value={form.groomName} onChange={(e) => onChange("groomName", e.target.value)} />
-      </label>
-      <label>
-        {t("builder.fields.brideName")}
-        <input value={form.brideName} onChange={(e) => onChange("brideName", e.target.value)} />
-      </label>
+      <Input
+        label={t("builder.fields.groomName")}
+        value={form.groomName}
+        onChange={(e) => onChange("groomName", e.target.value)}
+      />
+      <Input
+        label={t("builder.fields.brideName")}
+        value={form.brideName}
+        onChange={(e) => onChange("brideName", e.target.value)}
+      />
     </div>
   );
 }
