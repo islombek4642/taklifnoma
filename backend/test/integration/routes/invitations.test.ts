@@ -110,3 +110,29 @@ describe("GET /api/invitations/me/guests", () => {
     expect(response.json()).toEqual([]);
   });
 });
+
+describe("DELETE /api/invitations/me", () => {
+  it("deletes the invitation and a subsequent GET returns 404", async () => {
+    const app = buildTestApp();
+    await app.inject({
+      method: "POST",
+      url: "/api/invitations",
+      headers: { authorization: authHeader(4), "content-type": "application/json" },
+      payload: validPayload,
+    });
+
+    const deleteResponse = await app.inject({
+      method: "DELETE",
+      url: "/api/invitations/me",
+      headers: { authorization: authHeader(4) },
+    });
+    expect(deleteResponse.statusCode).toBe(204);
+
+    const getResponse = await app.inject({
+      method: "GET",
+      url: "/api/invitations/me",
+      headers: { authorization: authHeader(4) },
+    });
+    expect(getResponse.statusCode).toBe(404);
+  });
+});

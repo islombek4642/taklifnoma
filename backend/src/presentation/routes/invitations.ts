@@ -6,6 +6,7 @@ import { CreateInvitationUseCase } from "../../application/use-cases/create-invi
 import { GetMyInvitationUseCase } from "../../application/use-cases/get-my-invitation.js";
 import { UpdateInvitationUseCase } from "../../application/use-cases/update-invitation.js";
 import { ListGuestsUseCase } from "../../application/use-cases/list-guests.js";
+import { DeleteInvitationUseCase } from "../../application/use-cases/delete-invitation.js";
 import type { AppDependencies } from "../types.js";
 import type { InvitationInput } from "../../domain/invitation.js";
 
@@ -45,6 +46,7 @@ export async function registerInvitationsRoutes(app: FastifyInstance, deps: AppD
   const getMyInvitation = new GetMyInvitationUseCase(deps.invitationRepository);
   const updateInvitation = new UpdateInvitationUseCase(deps.invitationRepository);
   const listGuests = new ListGuestsUseCase(deps.invitationRepository, deps.rsvpRepository);
+  const deleteInvitation = new DeleteInvitationUseCase(deps.invitationRepository);
 
   app.post(API_ROUTES.CREATE_INVITATION, { preHandler: auth }, async (request, reply) => {
     const ownerTelegramId = request.ownerTelegramId!;
@@ -72,5 +74,10 @@ export async function registerInvitationsRoutes(app: FastifyInstance, deps: AppD
   app.get(API_ROUTES.MY_GUESTS, { preHandler: auth }, async (request, reply) => {
     const guests = await listGuests.execute(request.ownerTelegramId!);
     reply.send(guests.map(serializeGuest));
+  });
+
+  app.delete(API_ROUTES.MY_INVITATION, { preHandler: auth }, async (request, reply) => {
+    await deleteInvitation.execute(request.ownerTelegramId!);
+    reply.code(204).send();
   });
 }

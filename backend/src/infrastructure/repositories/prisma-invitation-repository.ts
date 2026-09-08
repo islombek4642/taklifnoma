@@ -49,4 +49,8 @@ export class PrismaInvitationRepository implements InvitationRepository {
     const row = await prisma.invitation.update({ where: { id }, data: input });
     return toDomain(row);
   }
+
+  async delete(id: string): Promise<void> {
+    await prisma.invitation.delete({ where: { id } });
+  }
 }
