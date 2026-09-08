@@ -45,6 +45,7 @@
     "loading": "Yuklanmoqda...",
     "summary": "{{coming}} kishi keladi, {{notComing}} kishi kelmaydi",
     "empty": "Hali hech kim javob bermagan",
+    "noInvitation": "Mehmonlarni ko'rish uchun avval taklifnoma yarating",
     "comingLabel": "Keladi",
     "notComingLabel": "Kelmaydi"
   },
