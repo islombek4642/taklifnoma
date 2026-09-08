@@ -14,6 +14,7 @@ export function serializeInvitation(invitation: Invitation) {
     venueAddress: invitation.venueAddress,
     mapUrl: invitation.mapUrl ?? null,
     greetingText: invitation.greetingText ?? null,
+    templateId: invitation.templateId,
     musicTrackId: invitation.musicTrackId,
     createdAt: invitation.createdAt.toISOString(),
     updatedAt: invitation.updatedAt.toISOString(),

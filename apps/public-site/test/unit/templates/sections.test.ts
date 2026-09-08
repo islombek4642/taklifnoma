@@ -20,6 +20,7 @@ const baseInvitation: PublicInvitationDto = {
   venueAddress: "Toshkent",
   mapUrl: "https://maps.google.com/?q=1,2",
   greetingText: null,
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 
@@ -73,14 +74,15 @@ describe("renderRsvpSection", () => {
 });
 
 describe("renderMusicSection", () => {
-  it("renders the toggle and audio element for a known track", () => {
-    const html = renderMusicSection(baseInvitation, t);
+  it("renders the toggle and audio element for a resolved track file url", () => {
+    const html = renderMusicSection(t, "/media/music/romantic-piano/track.wav");
 
     expect(html).toContain("data-music-toggle");
     expect(html).toContain("data-music-audio");
+    expect(html).toContain('src="/media/music/romantic-piano/track.wav"');
   });
 
-  it("renders nothing for an unknown musicTrackId", () => {
-    expect(renderMusicSection({ ...baseInvitation, musicTrackId: "unknown" }, t)).toBe("");
+  it("renders nothing when no track file url is given", () => {
+    expect(renderMusicSection(t, undefined)).toBe("");
   });
 });

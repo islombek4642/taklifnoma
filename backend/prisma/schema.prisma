@@ -20,6 +20,7 @@ model Invitation {
   venueAddress     String
   mapUrl           String?
   greetingText     String?
+  templateId       String         @default("classic")
   musicTrackId     String
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt

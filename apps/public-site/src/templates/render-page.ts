@@ -1,7 +1,6 @@
 import type { TFunction } from "i18next";
 import type { PublicInvitationDto } from "../services/backend-api-client.js";
 import { escapeHtml } from "./sanitize.js";
-import { INLINE_STYLES } from "./styles.js";
 import { renderClientScript } from "./client-script.js";
 import { renderHeroSection } from "./sections/hero.js";
 import { renderCountdownSection } from "./sections/countdown.js";
@@ -9,7 +8,12 @@ import { renderVenueSection } from "./sections/venue.js";
 import { renderRsvpSection } from "./sections/rsvp.js";
 import { renderMusicSection } from "./sections/music.js";
 
-export function renderInvitationPage(invitation: PublicInvitationDto, t: TFunction): string {
+export function renderInvitationPage(
+  invitation: PublicInvitationDto,
+  t: TFunction,
+  styleCss: string,
+  musicFileUrl: string | undefined,
+): string {
   const title = `${invitation.groomName} & ${invitation.brideName} — ${t("meta.titleSuffix")}`;
   const script = renderClientScript(invitation.slug, invitation.eventDateTime, {
     comingThankYou: t("rsvp.thankYouComing"),
@@ -24,14 +28,14 @@ export function renderInvitationPage(invitation: PublicInvitationDto, t: TFuncti
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>${escapeHtml(title)}</title>
-<style>${INLINE_STYLES}</style>
+<style>${styleCss}</style>
 </head>
 <body>
 ${renderHeroSection(invitation, t)}
 ${renderCountdownSection(invitation, t)}
 ${renderVenueSection(invitation, t)}
 ${renderRsvpSection(t)}
-${renderMusicSection(invitation, t)}
+${renderMusicSection(t, musicFileUrl)}
 <script>${script}</script>
 </body>
 </html>`;

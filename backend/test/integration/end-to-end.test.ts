@@ -5,6 +5,8 @@ import { buildApp } from "../../src/presentation/app.js";
 import { PrismaInvitationRepository } from "../../src/infrastructure/repositories/prisma-invitation-repository.js";
 import { PrismaRsvpRepository } from "../../src/infrastructure/repositories/prisma-rsvp-repository.js";
 import { FakeOwnerNotifier } from "../helpers/fake-owner-notifier.js";
+import { InMemoryTemplateRegistry } from "../helpers/in-memory-template-registry.js";
+import { InMemoryMusicRegistry } from "../helpers/in-memory-music-registry.js";
 import { signInitData } from "../helpers/sign-init-data.js";
 
 const BOT_TOKEN = "test-bot-token";
@@ -32,6 +34,9 @@ describe("end-to-end: create invitation, guest RSVPs, owner sees guest list", ()
       invitationRepository: new PrismaInvitationRepository(),
       rsvpRepository: new PrismaRsvpRepository(),
       ownerNotifier: notifier,
+      templateRegistry: new InMemoryTemplateRegistry(),
+      musicRegistry: new InMemoryMusicRegistry(),
+      contentDir: "/tmp/taklifnoma-test-content",
       botToken: BOT_TOKEN,
     });
 
@@ -45,6 +50,7 @@ describe("end-to-end: create invitation, guest RSVPs, owner sees guest list", ()
         eventDateTime: "2026-12-05T16:00:00.000Z",
         venueName: "Sun Palace",
         venueAddress: "Andijon",
+        templateId: "classic",
         musicTrackId: "gentle-strings",
       },
     });

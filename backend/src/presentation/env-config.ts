@@ -1,7 +1,10 @@
+import path from "node:path";
+
 export interface EnvConfig {
   botToken: string;
   port: number;
   miniAppOrigin: string;
+  contentDir: string;
 }
 
 export function loadEnvConfig(): EnvConfig {
@@ -20,5 +23,10 @@ export function loadEnvConfig(): EnvConfig {
     throw new Error("PORT environment variable must be a number");
   }
 
-  return { botToken, port, miniAppOrigin };
+  // Where uploaded templates/music live (content/templates, content/music).
+  // In production this points at a subdirectory of the mounted data volume
+  // so it survives container recreation; defaults to a local folder for dev.
+  const contentDir = process.env.CONTENT_DIR ?? path.join(process.cwd(), "content");
+
+  return { botToken, port, miniAppOrigin, contentDir };
 }

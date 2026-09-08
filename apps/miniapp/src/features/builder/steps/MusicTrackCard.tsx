@@ -1,18 +1,17 @@
 import { useRef, useState } from "react";
 import { Play, Pause, Check } from "lucide-react";
-import type { MusicTrack } from "../../../constants/music-tracks.js";
 import "./MusicTrackCard.css";
 
 interface MusicTrackCardProps {
-  track: MusicTrack;
   title: string;
+  audioUrl: string;
   selected: boolean;
   onSelect: () => void;
 }
 
 const WAVEFORM_BAR_HEIGHTS = [6, 11, 15, 8, 13, 6, 10, 15, 9, 7, 12, 6];
 
-export function MusicTrackCard({ track, title, selected, onSelect }: MusicTrackCardProps) {
+export function MusicTrackCard({ title, audioUrl, selected, onSelect }: MusicTrackCardProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -58,7 +57,7 @@ export function MusicTrackCard({ track, title, selected, onSelect }: MusicTrackC
 
       <audio
         ref={audioRef}
-        src={track.fileUrl}
+        src={audioUrl}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onEnded={() => setPlaying(false)}

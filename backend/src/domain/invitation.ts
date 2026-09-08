@@ -8,6 +8,7 @@ export interface InvitationInput {
   venueAddress: string;
   mapUrl?: string;
   greetingText?: string;
+  templateId: string;
   musicTrackId: string;
 }
 
@@ -25,6 +26,7 @@ const REQUIRED_STRING_FIELDS: Array<keyof InvitationInput> = [
   "brideName",
   "venueName",
   "venueAddress",
+  "templateId",
   "musicTrackId",
 ];
 

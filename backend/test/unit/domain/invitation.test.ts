@@ -10,6 +10,7 @@ const validInput: InvitationInput = {
   venueAddress: "Toshkent viloyati, Qibray tumani",
   mapUrl: "https://maps.google.com/?q=41.0,69.0",
   greetingText: "Aziz mehmonlar!",
+  templateId: "classic",
   musicTrackId: "romantic-piano",
 };
 
@@ -23,6 +24,7 @@ describe("validateInvitationInput", () => {
     ["brideName", { ...validInput, brideName: "  " }],
     ["venueName", { ...validInput, venueName: "" }],
     ["venueAddress", { ...validInput, venueAddress: "" }],
+    ["templateId", { ...validInput, templateId: "" }],
     ["musicTrackId", { ...validInput, musicTrackId: "" }],
   ])("rejects empty %s", (field, input) => {
     try {

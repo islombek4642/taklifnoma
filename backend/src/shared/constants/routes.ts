@@ -4,4 +4,10 @@ export const API_ROUTES = {
   MY_GUESTS: "/api/invitations/me/guests",
   PUBLIC_INVITATION_BY_SLUG: "/api/public/invitations/:slug",
   PUBLIC_RSVP: "/api/public/invitations/:slug/rsvp",
+  TEMPLATES: "/api/templates",
+  MUSIC_TRACKS: "/api/music-tracks",
+} as const;
+
+export const MEDIA_ROUTES = {
+  MUSIC_PREFIX: "/media/music/",
 } as const;

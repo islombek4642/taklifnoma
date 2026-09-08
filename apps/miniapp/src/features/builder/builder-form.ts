@@ -10,6 +10,7 @@ export interface BuilderFormState {
   mapUrl: string;
   greetingText: string;
   musicTrackId: string;
+  templateId: string;
 }
 
 export const INITIAL_BUILDER_FORM_STATE: BuilderFormState = {
@@ -22,9 +23,10 @@ export const INITIAL_BUILDER_FORM_STATE: BuilderFormState = {
   mapUrl: "",
   greetingText: "",
   musicTrackId: "",
+  templateId: "",
 };
 
-export const BUILDER_STEP_COUNT = 5;
+export const BUILDER_STEP_COUNT = 6;
 
 export function isStepValid(step: number, state: BuilderFormState): boolean {
   switch (step) {
@@ -38,6 +40,8 @@ export function isStepValid(step: number, state: BuilderFormState): boolean {
       return true;
     case 4:
       return state.musicTrackId.length > 0;
+    case 5:
+      return state.templateId.length > 0;
     default:
       return false;
   }
@@ -56,6 +60,7 @@ export function toInvitationInput(state: BuilderFormState): InvitationInputDto {
     mapUrl: mapUrl.length > 0 ? mapUrl : undefined,
     greetingText: greetingText.length > 0 ? greetingText : undefined,
     musicTrackId: state.musicTrackId,
+    templateId: state.templateId,
   };
 }
 
@@ -71,5 +76,6 @@ export function fromInvitation(invitation: InvitationDto): BuilderFormState {
     mapUrl: invitation.mapUrl ?? "",
     greetingText: invitation.greetingText ?? "",
     musicTrackId: invitation.musicTrackId,
+    templateId: invitation.templateId,
   };
 }

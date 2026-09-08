@@ -16,7 +16,8 @@
       "dateTime": "Sana va vaqt",
       "venue": "To'y zali",
       "greeting": "Tabrik matni",
-      "music": "Fon musiqasi"
+      "music": "Fon musiqasi",
+      "template": "Shablon"
     },
     "fields": {
       "groomName": "Kuyov ismi",
@@ -27,7 +28,8 @@
       "venueAddress": "Manzil",
       "mapUrl": "Xarita havolasi (ixtiyoriy)",
       "greetingText": "Tabrik matni (ixtiyoriy)",
-      "musicTrack": "Musiqa tanlang"
+      "musicTrack": "Musiqa tanlang",
+      "template": "Taklifnoma dizaynini tanlang"
     },
     "next": "Keyingi",
     "back": "Orqaga",
@@ -57,10 +59,6 @@
     "deleteConfirm": "Rostdan ham taklifnomangizni o'chirmoqchimisiz? Bu amalni bekor qilib bo'lmaydi.",
     "deleteConfirmYes": "Ha, o'chirish",
     "deleteConfirmNo": "Bekor qilish"
-  },
-  "music": {
-    "romanticPiano": "Romantik pianino",
-    "gentleStrings": "Yumshoq torli asboblar"
   },
   "common": {
     "errorGeneric": "Xatolik yuz berdi. Qaytadan urinib ko'ring."

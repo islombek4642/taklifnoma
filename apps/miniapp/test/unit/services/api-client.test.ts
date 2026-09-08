@@ -22,6 +22,7 @@ describe("createApiClient", () => {
       eventDateTime: "2026-11-11T17:00:00.000Z",
       venueName: "V",
       venueAddress: "Addr",
+      templateId: "classic",
       musicTrackId: "romantic-piano",
     });
 
@@ -53,6 +54,7 @@ describe("createApiClient", () => {
         eventDateTime: "2026-11-11T17:00:00.000Z",
         venueName: "V",
         venueAddress: "Addr",
+        templateId: "classic",
         musicTrackId: "romantic-piano",
       }),
     ).rejects.toBeInstanceOf(ApiError);
@@ -89,5 +91,23 @@ describe("createApiClient", () => {
     const [url, options] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toBe(`${BASE_URL}/api/invitations/me`);
     expect(options.method).toBe("DELETE");
+  });
+
+  it("fetches templates", async () => {
+    const templates = [{ id: "classic", name: "Klassik", accentColor: "#b45d52" }];
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => templates }));
+
+    const client = createApiClient(BASE_URL);
+
+    expect(await client.getTemplates()).toEqual(templates);
+  });
+
+  it("fetches music tracks", async () => {
+    const tracks = [{ id: "romantic-piano", title: "Romantik pianino", fileUrl: "/media/music/romantic-piano/track.wav" }];
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => tracks }));
+
+    const client = createApiClient(BASE_URL);
+
+    expect(await client.getMusicTracks()).toEqual(tracks);
   });
 });
