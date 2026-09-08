@@ -1,6 +1,7 @@
 export interface EnvConfig {
   botToken: string;
   port: number;
+  miniAppOrigin: string;
 }
 
 export function loadEnvConfig(): EnvConfig {
@@ -9,10 +10,15 @@ export function loadEnvConfig(): EnvConfig {
     throw new Error("TELEGRAM_BOT_TOKEN environment variable is required");
   }
 
+  const miniAppOrigin = process.env.MINIAPP_ORIGIN;
+  if (!miniAppOrigin) {
+    throw new Error("MINIAPP_ORIGIN environment variable is required");
+  }
+
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   if (Number.isNaN(port)) {
     throw new Error("PORT environment variable must be a number");
   }
 
-  return { botToken, port };
+  return { botToken, port, miniAppOrigin };
 }

@@ -13,6 +13,37 @@ function buildTestApp() {
   });
 }
 
+describe("CORS", () => {
+  it("allows the Mini App's configured origin to call a protected route, including preflight", async () => {
+    const app = buildApp({
+      invitationRepository: new InMemoryInvitationRepository(),
+      rsvpRepository: new InMemoryRsvpRepository(),
+      ownerNotifier: new FakeOwnerNotifier(),
+      botToken: "test-bot-token",
+      corsOrigin: "https://app.example.com",
+    });
+
+    const preflight = await app.inject({
+      method: "OPTIONS",
+      url: "/api/invitations/me",
+      headers: {
+        origin: "https://app.example.com",
+        "access-control-request-method": "GET",
+        "access-control-request-headers": "authorization",
+      },
+    });
+    expect(preflight.statusCode).toBe(204);
+    expect(preflight.headers["access-control-allow-origin"]).toBe("https://app.example.com");
+
+    const actual = await app.inject({
+      method: "GET",
+      url: "/api/invitations/me",
+      headers: { origin: "https://app.example.com" },
+    });
+    expect(actual.headers["access-control-allow-origin"]).toBe("https://app.example.com");
+  });
+});
+
 describe("GET /health", () => {
   it("returns 200 with an ok status, for Docker healthchecks", async () => {
     const app = buildTestApp();

@@ -11,6 +11,7 @@ const app = buildApp({
   rsvpRepository: new PrismaRsvpRepository(),
   ownerNotifier: new TelegramOwnerNotifier(config.botToken),
   botToken: config.botToken,
+  corsOrigin: config.miniAppOrigin,
 });
 
 app
