@@ -40,4 +40,8 @@ export class InMemoryInvitationRepository implements InvitationRepository {
     this.invitations.set(id, updated);
     return updated;
   }
+
+  async delete(id: string): Promise<void> {
+    this.invitations.delete(id);
+  }
 }

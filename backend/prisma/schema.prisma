@@ -28,7 +28,7 @@ model Invitation {
 model RsvpResponse {
   id            String     @id @default(uuid())
   invitationId  String
-  invitation    Invitation @relation(fields: [invitationId], references: [id])
+  invitation    Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
   guestName     String
   status        String
   respondedAt   DateTime   @default(now())

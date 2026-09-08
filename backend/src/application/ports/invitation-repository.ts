@@ -6,4 +6,5 @@ export interface InvitationRepository {
   findBySlug(slug: string): Promise<Invitation | null>;
   slugExists(slug: string): Promise<boolean>;
   update(id: string, input: Partial<InvitationInput>): Promise<Invitation>;
+  delete(id: string): Promise<void>;
 }
