@@ -2,14 +2,14 @@ import { buildApp } from "./app.js";
 import { loadEnvConfig } from "./env-config.js";
 import { PrismaInvitationRepository } from "../infrastructure/repositories/prisma-invitation-repository.js";
 import { PrismaRsvpRepository } from "../infrastructure/repositories/prisma-rsvp-repository.js";
-import { ConsoleOwnerNotifier } from "../infrastructure/notifications/console-owner-notifier.js";
+import { TelegramOwnerNotifier } from "../infrastructure/notifications/telegram-owner-notifier.js";
 
 const config = loadEnvConfig();
 
 const app = buildApp({
   invitationRepository: new PrismaInvitationRepository(),
   rsvpRepository: new PrismaRsvpRepository(),
-  ownerNotifier: new ConsoleOwnerNotifier(),
+  ownerNotifier: new TelegramOwnerNotifier(config.botToken),
   botToken: config.botToken,
 });
 
