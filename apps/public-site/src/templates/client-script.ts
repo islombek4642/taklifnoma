@@ -198,16 +198,20 @@ export function renderClientScript(
     });
   }
 
+  // Never autoplays — browsers block audio with sound until the guest
+  // interacts with the page anyway, so playback only starts from this
+  // click. The wave bars (an always-inlined, template-agnostic style) show
+  // only while playing, driven purely by this one class toggle.
   var musicButton = document.querySelector("[data-music-toggle]");
   var musicAudio = document.querySelector("[data-music-audio]");
   if (musicButton && musicAudio) {
     musicButton.addEventListener("click", function () {
       if (musicAudio.paused) {
         musicAudio.play();
-        musicButton.classList.add("music-toggle--playing");
+        musicButton.classList.add("taklifnoma-music-toggle--playing");
       } else {
         musicAudio.pause();
-        musicButton.classList.remove("music-toggle--playing");
+        musicButton.classList.remove("taklifnoma-music-toggle--playing");
       }
     });
   }

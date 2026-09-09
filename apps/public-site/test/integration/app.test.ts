@@ -92,7 +92,10 @@ describe("GET /:slug", () => {
     const response = await app.inject({ method: "GET", url: "/ulugbek-malika" });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toContain(".music-toggle");
+    expect(response.body).toContain("font-family: system-ui");
+    // The music toggle (with its wave-bar animation) is always inlined
+    // regardless of which template resolved, fallback included.
+    expect(response.body).toContain("taklifnoma-music-toggle");
   });
 
   it("returns 404 with the not-found page for an unknown slug", async () => {
