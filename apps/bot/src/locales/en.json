@@ -11,10 +11,12 @@
     "help": "Get help"
   },
   "admin": {
-    "panelIntro": "As an admin, you can open the control panel using the button below.",
     "panelButton": "🛠 Admin panel",
     "menuTitle": "Admin panel — what would you like to do?",
     "addMusicButton": "🎵 Add music",
+    "addTemplateButton": "🖼 Add template",
+    "templateComingSoon": "Adding templates is still being built. It'll be available soon.",
+    "backButton": "⬅️ Back",
     "cancelButton": "Cancel",
     "cancelled": "Cancelled.",
     "askTitle": "Type a name for the new track.",
