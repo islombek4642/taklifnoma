@@ -35,6 +35,14 @@ describe("renderInvitationPage", () => {
     expect(html).toContain(JSON.stringify("/ulugbek-malika/rsvp"));
   });
 
+  it("always inlines the shared premium RSVP modal styles, regardless of the active template", () => {
+    const html = renderInvitationPage(invitation, t, "body { color: blue; }", undefined);
+
+    expect(html).toContain("taklifnoma-modal-overlay");
+    expect(html).toContain("taklifnoma-modal__ornament");
+    expect(html).toContain("data-rsvp-modal-overlay");
+  });
+
   it("omits the music section when no track file url is given", () => {
     const html = renderInvitationPage(invitation, t, "", undefined);
 

@@ -1,1 +1,66 @@
-{}
+{
+  "tabs": { "home": "Home", "guests": "Guests", "settings": "Settings" },
+  "home": {
+    "loading": "Loading...",
+    "emptyTitle": "You don't have an invitation yet",
+    "emptySubtitle": "Create your own wedding invitation in just a few minutes",
+    "createButton": "Create invitation",
+    "editButton": "Edit",
+    "viewButton": "View",
+    "shareButton": "Share"
+  },
+  "builder": {
+    "stepOf": "STEP {{current}} OF {{total}}",
+    "steps": {
+      "names": "Names",
+      "dateTime": "Date & time",
+      "venue": "Venue",
+      "greeting": "Greeting text",
+      "music": "Background music",
+      "template": "Template"
+    },
+    "fields": {
+      "groomName": "Groom's name",
+      "brideName": "Bride's name",
+      "eventDate": "Date",
+      "eventTime": "Time",
+      "venueName": "Venue name",
+      "venueAddress": "Address",
+      "mapUrl": "Map link (optional)",
+      "greetingText": "Greeting text (optional)",
+      "musicTrack": "Choose music",
+      "template": "Choose invitation design"
+    },
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "update": "Update"
+  },
+  "result": {
+    "title": "Invitation is ready!",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "share": "Share",
+    "view": "View",
+    "backHome": "Back home"
+  },
+  "guests": {
+    "loading": "Loading...",
+    "empty": "No one has responded yet",
+    "noInvitation": "Create an invitation first to see your guests",
+    "comingLabel": "Coming",
+    "notComingLabel": "Not coming"
+  },
+  "settings": {
+    "help": "Help / Contact",
+    "helpText": "For questions or feedback, contact @taklifnoma_support.",
+    "dangerZone": "Danger zone",
+    "deleteButton": "Delete invitation",
+    "deleteConfirm": "Are you sure you want to delete your invitation? This action cannot be undone.",
+    "deleteConfirmYes": "Yes, delete",
+    "deleteConfirmNo": "Cancel"
+  },
+  "common": {
+    "errorGeneric": "Something went wrong. Please try again."
+  }
+}

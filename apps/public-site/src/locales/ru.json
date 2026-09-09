@@ -1,1 +1,26 @@
-{}
+{
+  "meta": { "titleSuffix": "свадебное приглашение" },
+  "hero": { "defaultGreeting": "Приглашаем вас на нашу свадьбу!" },
+  "countdown": { "days": "дн", "hours": "ч", "minutes": "мин", "seconds": "сек" },
+  "venue": { "title": "Место проведения", "mapButton": "Открыть на карте" },
+  "rsvp": {
+    "title": "Подтвердите своё участие",
+    "namePlaceholder": "Ваше имя",
+    "comingButton": "Приду",
+    "notComingButton": "Не смогу",
+    "thankYouComing": "Спасибо! Будем вас ждать.",
+    "thankYouNotComing": "Спасибо за ваш ответ.",
+    "errorGeneric": "Произошла ошибка. Попробуйте ещё раз.",
+    "errorNameRequired": "Пожалуйста, введите ваше имя.",
+    "alreadyRespondedComing": "Вы уже ответили «Приду».",
+    "alreadyRespondedNotComing": "Вы уже ответили «Не смогу».",
+    "changeResponse": "Изменить ответ",
+    "modalComingTitle": "Подтверждаете, что придёте?",
+    "modalNotComingTitle": "Подтверждаете, что не сможете прийти?",
+    "confirmButton": "Подтвердить",
+    "cancelButton": "Отмена",
+    "modalClose": "Закрыть"
+  },
+  "music": { "toggleLabel": "Музыка" },
+  "notFound": { "title": "Приглашение не найдено", "subtitle": "Возможно, ссылка неверна или приглашение было удалено." }
+}
