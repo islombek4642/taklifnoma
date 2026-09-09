@@ -34,6 +34,13 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
 
   app.get("/:slug", async (request, reply) => {
     const { slug } = request.params as { slug: string };
+    // A slug can go from "not found" to "found" within seconds of the
+    // owner creating it and sharing the link (and RSVP counts change on
+    // every response), so this page must never be served from a client
+    // or intermediate cache — a cached 404 from an early fetch (e.g. a
+    // chat app generating a link preview) would otherwise stick around
+    // and outlive the invitation actually being created.
+    reply.header("cache-control", "no-store");
     const invitation = await deps.backendApiClient.getInvitationBySlug(slug);
 
     if (!invitation) {
@@ -52,6 +59,7 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
   });
 
   app.post("/:slug/rsvp", async (request, reply) => {
+    reply.header("cache-control", "no-store");
     const { slug } = request.params as { slug: string };
     const body = request.body as Record<string, unknown>;
 
