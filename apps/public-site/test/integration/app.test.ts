@@ -52,6 +52,7 @@ describe("GET /:slug", () => {
     expect(response.body).toContain("Ulug&#39;bek");
     expect(response.body).toContain("body { font-family: serif; }");
     expect(response.body).toContain('src="/media/music/romantic-piano/track.wav"');
+    expect(response.headers["cache-control"]).toBe("no-store");
   });
 
   it("falls back to a default style when the invitation's template isn't registered", async () => {
@@ -72,6 +73,7 @@ describe("GET /:slug", () => {
 
     expect(response.statusCode).toBe(404);
     expect(response.body).toContain("Taklifnoma topilmadi");
+    expect(response.headers["cache-control"]).toBe("no-store");
   });
 });
 

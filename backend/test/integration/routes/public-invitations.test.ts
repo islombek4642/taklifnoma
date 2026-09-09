@@ -41,14 +41,16 @@ describe("GET /api/public/invitations/:slug", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.json().groomName).toBe("Ulug'bek");
+    expect(response.headers["cache-control"]).toBe("no-store");
   });
 
-  it("returns 404 for an unknown slug", async () => {
+  it("returns 404 for an unknown slug, still uncached", async () => {
     const app = buildTestApp(new InMemoryInvitationRepository(), new FakeOwnerNotifier());
 
     const response = await app.inject({ method: "GET", url: "/api/public/invitations/unknown" });
 
     expect(response.statusCode).toBe(404);
+    expect(response.headers["cache-control"]).toBe("no-store");
   });
 });
 
