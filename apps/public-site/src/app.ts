@@ -50,7 +50,10 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
   app.get("/preview/:templateId", async (request, reply) => {
     reply.header("cache-control", "no-store");
     const { templateId } = request.params as { templateId: string };
-    const templates = await deps.backendApiClient.getTemplates();
+    const [templates, musicTracks] = await Promise.all([
+      deps.backendApiClient.getTemplates(),
+      deps.backendApiClient.getMusicTracks(),
+    ]);
     const template = templates.find((candidate) => candidate.id === templateId);
 
     if (!template) {
@@ -58,8 +61,14 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
       return;
     }
 
-    const invitation = buildPreviewInvitation(templateId, t);
-    reply.type("text/html").send(renderInvitationPage(invitation, t, template.styleCss, undefined, { previewMode: true }));
+    // Previewing a template should show the full experience it comes
+    // with, music included — there's no per-template music pairing yet,
+    // so this just picks the first registered track.
+    const musicTrack = musicTracks[0];
+    const invitation = buildPreviewInvitation(templateId, t, musicTrack?.id ?? "");
+    reply
+      .type("text/html")
+      .send(renderInvitationPage(invitation, t, template.styleCss, musicTrack?.fileUrl, { previewMode: true }));
   });
 
   app.get("/:slug", async (request, reply) => {

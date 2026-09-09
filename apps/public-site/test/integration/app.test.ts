@@ -124,6 +124,16 @@ describe("GET /preview/:templateId", () => {
     expect(response.body).toContain("var previewMode = true;");
   });
 
+  it("includes the music toggle, so the preview shows the full experience the template ships with", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    const app = buildApp({ backendApiClient });
+
+    const response = await app.inject({ method: "GET", url: "/preview/classic" });
+
+    expect(response.body).toContain("data-music-toggle");
+    expect(response.body).toContain('src="/media/music/romantic-piano/track.wav"');
+  });
+
   it("returns 404 for a template that isn't registered", async () => {
     const backendApiClient = new FakeBackendApiClient();
     const app = buildApp({ backendApiClient });
