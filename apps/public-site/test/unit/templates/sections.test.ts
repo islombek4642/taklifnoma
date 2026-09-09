@@ -64,23 +64,22 @@ describe("renderVenueSection", () => {
 });
 
 describe("renderRsvpSection", () => {
-  it("includes the status trigger buttons and the modal's form data hook", () => {
+  it("includes the always-visible name input and status submit buttons", () => {
     const html = renderRsvpSection(t);
 
-    expect(html).toContain("data-rsvp-buttons");
-    expect(html).toContain('data-status="COMING"');
-    expect(html).toContain('data-status="NOT_COMING"');
     expect(html).toContain("data-rsvp-form");
+    expect(html).toContain('name="guestName"');
+    expect(html).toContain('type="submit" data-status="COMING"');
+    expect(html).toContain('type="submit" data-status="NOT_COMING"');
   });
 
-  it("includes a premium confirmation modal, hidden by default, shared across all templates", () => {
+  it("includes a premium thank-you modal, hidden by default, shared across all templates", () => {
     const html = renderRsvpSection(t);
 
     expect(html).toContain("data-rsvp-modal-overlay");
     expect(html).toContain('class="taklifnoma-modal-overlay" data-rsvp-modal-overlay hidden');
     expect(html).toContain("taklifnoma-modal__ornament");
-    expect(html).toContain("data-rsvp-modal-title");
-    expect(html).toContain("data-rsvp-name-input");
+    expect(html).toContain("data-rsvp-modal-message");
   });
 
   it("includes a change-response control, hidden until the guest has responded", () => {

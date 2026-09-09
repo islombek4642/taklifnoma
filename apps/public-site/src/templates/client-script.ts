@@ -5,16 +5,14 @@ export interface RsvpLabels {
   nameRequired: string;
   alreadyRespondedComing: string;
   alreadyRespondedNotComing: string;
-  modalComingTitle: string;
-  modalNotComingTitle: string;
 }
 
 export interface RenderClientScriptOptions {
   // The template-preview page ("Ko'rish" from the home screen's template
-  // gallery) renders this exact script so the RSVP modal looks and feels
+  // gallery) renders this exact script so the RSVP flow looks and feels
   // real, but there's no actual invitation behind it — so a submit there
   // must never hit the network or touch localStorage, just show the
-  // thank-you state locally.
+  // thank-you modal locally.
   previewMode?: boolean;
 }
 
@@ -75,22 +73,15 @@ export function renderClientScript(
     try { window.localStorage.setItem(statusKey, status); } catch (e) {}
   }
 
-  var buttonsWrap = document.querySelector("[data-rsvp-buttons]");
-  var messageEl = document.querySelector("[data-rsvp-message]");
-  var changeBtn = document.querySelector("[data-rsvp-change]");
-  var modalOverlay = document.querySelector("[data-rsvp-modal-overlay]");
-  var modal = document.querySelector("[data-rsvp-modal]");
-  var modalTitle = document.querySelector("[data-rsvp-modal-title]");
-  var modalError = document.querySelector("[data-rsvp-modal-error]");
-  var modalClose = document.querySelector("[data-rsvp-modal-close]");
-  var modalCancel = document.querySelector("[data-rsvp-modal-cancel]");
   var form = document.querySelector("[data-rsvp-form]");
-  var nameInput = document.querySelector("[data-rsvp-name-input]");
+  var messageEl = document.querySelector("[data-rsvp-message]");
+  var statusMessageEl = document.querySelector("[data-rsvp-status-message]");
+  var changeBtn = document.querySelector("[data-rsvp-change]");
+  var nameInput = form ? form.querySelector('[name="guestName"]') : null;
+  var modalOverlay = document.querySelector("[data-rsvp-modal-overlay]");
+  var modalMessage = document.querySelector("[data-rsvp-modal-message]");
+  var modalClose = document.querySelector("[data-rsvp-modal-close]");
 
-  var modalTitles = {
-    COMING: ${JSON.stringify(labels.modalComingTitle)},
-    NOT_COMING: ${JSON.stringify(labels.modalNotComingTitle)}
-  };
   var thankYouLabels = {
     COMING: ${JSON.stringify(labels.comingThankYou)},
     NOT_COMING: ${JSON.stringify(labels.notComingThankYou)}
@@ -117,83 +108,73 @@ export function renderClientScript(
     el.style.display = "";
   }
 
-  function showRespondedState(status, freshlySubmitted) {
-    hide(buttonsWrap);
-    if (messageEl) {
-      messageEl.textContent = freshlySubmitted ? thankYouLabels[status] : alreadyRespondedLabels[status];
-      show(messageEl);
+  function showRespondedState(status) {
+    hide(form);
+    if (statusMessageEl) {
+      statusMessageEl.textContent = alreadyRespondedLabels[status];
+      show(statusMessageEl);
     }
     show(changeBtn);
   }
 
   if (!previewMode) {
     var savedStatus = getSavedStatus();
-    if (savedStatus) showRespondedState(savedStatus, false);
+    if (savedStatus) showRespondedState(savedStatus);
   }
 
-  function openModal(status) {
-    if (!modalOverlay || !modal) return;
-    modal.setAttribute("data-selected-status", status);
-    if (modalTitle) modalTitle.textContent = modalTitles[status] || "";
-    hide(modalError);
-    if (nameInput) nameInput.value = "";
+  function openThankYouModal(status) {
+    if (!modalOverlay || !modalMessage) return;
+    modalMessage.textContent = thankYouLabels[status] || "";
     show(modalOverlay);
-    if (nameInput) nameInput.focus();
   }
   function closeModal() {
     hide(modalOverlay);
   }
-
-  if (buttonsWrap) {
-    var triggers = buttonsWrap.querySelectorAll("[data-status]");
-    for (var i = 0; i < triggers.length; i++) {
-      triggers[i].addEventListener("click", function (event) {
-        openModal(event.currentTarget.getAttribute("data-status"));
-      });
-    }
-  }
-  if (changeBtn) {
-    changeBtn.addEventListener("click", function () {
-      hide(changeBtn);
-      hide(messageEl);
-      show(buttonsWrap);
-    });
-  }
   if (modalClose) modalClose.addEventListener("click", closeModal);
-  if (modalCancel) modalCancel.addEventListener("click", closeModal);
   if (modalOverlay) {
     modalOverlay.addEventListener("click", function (event) {
       if (event.target === modalOverlay) closeModal();
     });
   }
 
+  if (changeBtn) {
+    changeBtn.addEventListener("click", function () {
+      hide(changeBtn);
+      hide(statusMessageEl);
+      if (form) {
+        if (nameInput) nameInput.value = "";
+        hide(messageEl);
+        show(form);
+      }
+    });
+  }
+
   if (form) {
-    var confirmBtn = form.querySelector("[data-rsvp-confirm]");
-    var setFormDisabled = function (disabled) {
-      if (confirmBtn) confirmBtn.disabled = disabled;
-      if (nameInput) nameInput.disabled = disabled;
+    var buttons = form.querySelectorAll("[data-status]");
+    var setButtonsDisabled = function (disabled) {
+      for (var i = 0; i < buttons.length; i++) buttons[i].disabled = disabled;
     };
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      var status = modal ? modal.getAttribute("data-selected-status") : null;
+      var submitter = event.submitter;
+      var status = submitter ? submitter.getAttribute("data-status") : null;
       var guestName = nameInput ? nameInput.value.trim() : "";
       if (!guestName) {
-        if (modalError) modalError.textContent = ${JSON.stringify(labels.nameRequired)};
-        show(modalError);
+        if (messageEl) { messageEl.hidden = false; messageEl.textContent = ${JSON.stringify(labels.nameRequired)}; }
         return;
       }
 
       if (previewMode) {
-        closeModal();
-        showRespondedState(status, true);
+        openThankYouModal(status);
+        showRespondedState(status);
         return;
       }
 
       // Disabled immediately (not just after the request resolves) so a
       // second click while the first request is still in flight can't
       // fire a second, conflicting submission.
-      setFormDisabled(true);
+      setButtonsDisabled(true);
 
       fetch(${JSON.stringify(`/${slug}/rsvp`)}, {
         method: "POST",
@@ -205,15 +186,14 @@ export function renderClientScript(
           return res.json();
         })
         .then(function (result) {
-          setFormDisabled(false);
-          closeModal();
+          setButtonsDisabled(false);
           saveStatus(result.status);
-          showRespondedState(result.status, true);
+          openThankYouModal(result.status);
+          showRespondedState(result.status);
         })
         .catch(function () {
-          setFormDisabled(false);
-          if (modalError) modalError.textContent = ${JSON.stringify(labels.error)};
-          show(modalError);
+          setButtonsDisabled(false);
+          if (messageEl) { messageEl.hidden = false; messageEl.textContent = ${JSON.stringify(labels.error)}; }
         });
     });
   }

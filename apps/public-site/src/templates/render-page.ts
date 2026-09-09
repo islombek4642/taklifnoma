@@ -36,8 +36,6 @@ export function renderInvitationPage(
       nameRequired: t("rsvp.errorNameRequired"),
       alreadyRespondedComing: t("rsvp.alreadyRespondedComing"),
       alreadyRespondedNotComing: t("rsvp.alreadyRespondedNotComing"),
-      modalComingTitle: t("rsvp.modalComingTitle"),
-      modalNotComingTitle: t("rsvp.modalNotComingTitle"),
     },
     { previewMode },
   );

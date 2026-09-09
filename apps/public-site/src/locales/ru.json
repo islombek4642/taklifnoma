@@ -15,10 +15,6 @@
     "alreadyRespondedComing": "Вы уже ответили «Приду».",
     "alreadyRespondedNotComing": "Вы уже ответили «Не смогу».",
     "changeResponse": "Изменить ответ",
-    "modalComingTitle": "Подтверждаете, что придёте?",
-    "modalNotComingTitle": "Подтверждаете, что не сможете прийти?",
-    "confirmButton": "Подтвердить",
-    "cancelButton": "Отмена",
     "modalClose": "Закрыть"
   },
   "music": { "toggleLabel": "Музыка" },
