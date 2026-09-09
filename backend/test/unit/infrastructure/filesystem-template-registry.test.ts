@@ -43,6 +43,21 @@ describe("FilesystemTemplateRegistry", () => {
     ]);
   });
 
+  it("defaults description to an empty string for a manifest written before that field existed", async () => {
+    // seedContentDir never overwrites a folder that's already there, so a
+    // CONTENT_DIR seeded before the `description` field was introduced can
+    // legitimately have a manifest.json without it — this must never crash
+    // a page that lists templates (e.g. the landing page).
+    await writeTemplate("classic", { name: "Klassik", accentColor: "#b45d52" });
+    const registry = new FilesystemTemplateRegistry(contentDir);
+
+    const templates = await registry.list();
+
+    expect(templates).toEqual([
+      { id: "classic", name: "Klassik", description: "", accentColor: "#b45d52", styleCss: "body { color: red; }" },
+    ]);
+  });
+
   it("skips a folder that has no manifest.json", async () => {
     await mkdir(path.join(contentDir, "templates", "broken"), { recursive: true });
     const registry = new FilesystemTemplateRegistry(contentDir);
