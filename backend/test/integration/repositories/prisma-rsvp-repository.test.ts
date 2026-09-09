@@ -49,4 +49,31 @@ describe("PrismaRsvpRepository", () => {
 
     expect(list.map((r) => r.guestName)).toEqual(["Aziza", "Bek"]);
   });
+
+  it("upsertByToken creates once then updates the same row on repeat submissions", async () => {
+    const invitation = await createTestInvitation();
+    const repo = new PrismaRsvpRepository();
+
+    const first = await repo.upsertByToken(invitation.id, "guest-1", { guestName: "Aziza", status: "COMING" });
+    expect(first.previousStatus).toBeNull();
+
+    const second = await repo.upsertByToken(invitation.id, "guest-1", { guestName: "Aziza", status: "NOT_COMING" });
+    expect(second.previousStatus).toBe("COMING");
+    expect(second.rsvp.id).toBe(first.rsvp.id);
+    expect(second.rsvp.status).toBe("NOT_COMING");
+
+    const list = await repo.listByInvitationId(invitation.id);
+    expect(list).toHaveLength(1);
+  });
+
+  it("different guest tokens on the same invitation stay separate rows", async () => {
+    const invitation = await createTestInvitation();
+    const repo = new PrismaRsvpRepository();
+
+    await repo.upsertByToken(invitation.id, "guest-1", { guestName: "Aziza", status: "COMING" });
+    await repo.upsertByToken(invitation.id, "guest-2", { guestName: "Bek", status: "COMING" });
+
+    const list = await repo.listByInvitationId(invitation.id);
+    expect(list).toHaveLength(2);
+  });
 });

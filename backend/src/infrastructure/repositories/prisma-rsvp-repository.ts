@@ -1,6 +1,6 @@
 import type { RsvpResponse as PrismaRsvpRow } from "@prisma/client";
 import { prisma } from "../db/prisma-client.js";
-import type { RsvpRepository } from "../../application/ports/rsvp-repository.js";
+import type { RsvpRepository, RsvpUpsertResult } from "../../application/ports/rsvp-repository.js";
 import type { RsvpInput, RsvpResponse } from "../../domain/rsvp-response.js";
 import type { RsvpStatus } from "../../shared/constants/rsvp-status.js";
 
@@ -20,6 +20,20 @@ export class PrismaRsvpRepository implements RsvpRepository {
       data: { invitationId, guestName: input.guestName.trim(), status: input.status },
     });
     return toDomain(row);
+  }
+
+  async upsertByToken(invitationId: string, guestToken: string, input: RsvpInput): Promise<RsvpUpsertResult> {
+    const existing = await prisma.rsvpResponse.findUnique({
+      where: { invitationId_guestToken: { invitationId, guestToken } },
+    });
+
+    const row = await prisma.rsvpResponse.upsert({
+      where: { invitationId_guestToken: { invitationId, guestToken } },
+      create: { invitationId, guestToken, guestName: input.guestName.trim(), status: input.status },
+      update: { guestName: input.guestName.trim(), status: input.status, respondedAt: new Date() },
+    });
+
+    return { rsvp: toDomain(row), previousStatus: existing ? (existing.status as RsvpStatus) : null };
   }
 
   async listByInvitationId(invitationId: string): Promise<RsvpResponse[]> {

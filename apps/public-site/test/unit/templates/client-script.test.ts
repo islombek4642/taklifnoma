@@ -25,4 +25,17 @@ describe("renderClientScript", () => {
     expect(script).toContain(JSON.stringify("2026-11-11T17:00:00.000Z"));
     expect(script).toContain(JSON.stringify("Rahmat!"));
   });
+
+  it("sends a persisted guestToken and disables the buttons before the request goes out", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", {
+      comingThankYou: "Rahmat!",
+      notComingThankYou: "Rahmat, javobingiz uchun.",
+      error: "Xatolik",
+      nameRequired: "Ismingizni kiriting",
+    });
+
+    expect(script).toContain("guestToken: getGuestToken()");
+    expect(script).toContain("taklifnoma_guest_token");
+    expect(script).toContain("setButtonsDisabled(true)");
+  });
 });

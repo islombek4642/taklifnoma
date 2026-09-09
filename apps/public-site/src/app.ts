@@ -63,10 +63,13 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
     const { slug } = request.params as { slug: string };
     const body = request.body as Record<string, unknown>;
 
+    const guestToken = typeof body.guestToken === "string" && body.guestToken.length > 0 ? body.guestToken : undefined;
+
     try {
       const result = await deps.backendApiClient.submitRsvp(slug, {
         guestName: String(body.guestName ?? ""),
         status: String(body.status ?? ""),
+        guestToken,
       });
       reply.code(201).send(result);
     } catch (error) {

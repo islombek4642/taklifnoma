@@ -72,6 +72,30 @@ describe("POST /api/public/invitations/:slug/rsvp", () => {
     expect(notifier.notifications).toHaveLength(1);
   });
 
+  it("resubmitting with the same guestToken updates in place instead of adding a duplicate", async () => {
+    const invitations = new InMemoryInvitationRepository();
+    await invitations.create(baseInvitation);
+    const notifier = new FakeOwnerNotifier();
+    const app = buildTestApp(invitations, notifier);
+    const payload = { guestName: "Aziza", status: "COMING", guestToken: "guest-1" };
+
+    await app.inject({
+      method: "POST",
+      url: "/api/public/invitations/ulugbek-malika/rsvp",
+      headers: { "content-type": "application/json" },
+      payload,
+    });
+    const secondResponse = await app.inject({
+      method: "POST",
+      url: "/api/public/invitations/ulugbek-malika/rsvp",
+      headers: { "content-type": "application/json" },
+      payload,
+    });
+
+    expect(secondResponse.statusCode).toBe(201);
+    expect(notifier.notifications).toHaveLength(1);
+  });
+
   it("returns 429 after exceeding the per-IP rate limit", async () => {
     const invitations = new InMemoryInvitationRepository();
     await invitations.create(baseInvitation);
