@@ -7,7 +7,7 @@ const PREVIEW_EVENT_OFFSET_MS = 30 * 24 * 60 * 60 * 1000;
 // invitation page for a template, so guests see the actual design before
 // it's chosen — but there's no real invitation yet at that point, so this
 // fills in the sections with sample content instead.
-export function buildPreviewInvitation(templateId: string, t: TFunction): PublicInvitationDto {
+export function buildPreviewInvitation(templateId: string, t: TFunction, musicTrackId: string): PublicInvitationDto {
   return {
     id: "preview",
     slug: "preview",
@@ -19,6 +19,6 @@ export function buildPreviewInvitation(templateId: string, t: TFunction): Public
     mapUrl: null,
     greetingText: null,
     templateId,
-    musicTrackId: "",
+    musicTrackId,
   };
 }
