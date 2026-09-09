@@ -154,7 +154,12 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
       return;
     }
 
-    await ctx.reply(t("admin.uploading"));
+    // Edited in place rather than followed by a separate result message,
+    // so the "Yuklanmoqda..." bubble turns into the outcome instead of
+    // lingering alongside it (Telegram can't attach a reply keyboard to an
+    // edited message, so the submenu keyboard from the previous step stays
+    // as-is until the admin's next tap).
+    const statusMessage = await ctx.reply(t("admin.uploading"));
     try {
       const file = await ctx.getFile();
       const fileResponse = await fetch(`https://api.telegram.org/file/bot${botToken}/${file.file_path}`);
@@ -162,9 +167,13 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
 
       const track = await adminClient.createMusicTrack(session.title, fileBytes, extension);
       sessions.delete(userId);
-      await ctx.reply(t("admin.uploadSuccess", { title: track.title }), { reply_markup: buildAdminMenuKeyboard(t) });
+      await ctx.api.editMessageText(
+        statusMessage.chat.id,
+        statusMessage.message_id,
+        t("admin.uploadSuccess", { title: track.title }),
+      );
     } catch {
-      await ctx.reply(t("admin.uploadError"));
+      await ctx.api.editMessageText(statusMessage.chat.id, statusMessage.message_id, t("admin.uploadError"));
     }
   });
 }
