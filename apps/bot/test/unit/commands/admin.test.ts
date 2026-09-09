@@ -3,7 +3,6 @@ import { createI18n } from "../../../src/i18n/i18n.js";
 import {
   buildAdminMenuKeyboard,
   buildAdminOnlyKeyboard,
-  buildCancelKeyboard,
   isAdmin,
   resolveAudioExtension,
 } from "../../../src/commands/admin.js";
@@ -59,13 +58,5 @@ describe("buildAdminMenuKeyboard", () => {
 
     expect(keyboard.keyboard[0]).toEqual([{ text: "🎵 Musiqa qo'shish" }, { text: "🖼 Shablon qo'shish" }]);
     expect(keyboard.keyboard[1]).toEqual([{ text: "⬅️ Orqaga" }]);
-  });
-});
-
-describe("buildCancelKeyboard", () => {
-  it("has a single reply-keyboard button with the cancel label", () => {
-    const keyboard = buildCancelKeyboard(t);
-
-    expect(keyboard.keyboard[0]).toEqual([{ text: "Bekor qilish" }]);
   });
 });
