@@ -8,8 +8,6 @@ const labels = {
   nameRequired: "Ismingizni kiriting",
   alreadyRespondedComing: "Siz allaqachon \"Kelaman\" deb javob bergansiz.",
   alreadyRespondedNotComing: "Siz allaqachon \"Kelolmayman\" deb javob bergansiz.",
-  modalComingTitle: "Kelishingizni tasdiqlaysizmi?",
-  modalNotComingTitle: "Kelolmasligingizni tasdiqlaysizmi?",
 };
 
 describe("renderClientScript", () => {
@@ -27,21 +25,29 @@ describe("renderClientScript", () => {
     expect(script).toContain(JSON.stringify("Rahmat!"));
   });
 
-  it("sends a persisted guestToken and disables the form before the request goes out", () => {
+  it("sends a persisted guestToken and disables the buttons before the request goes out", () => {
     const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
 
     expect(script).toContain("guestToken: getGuestToken()");
     expect(script).toContain("taklifnoma_guest_token");
-    expect(script).toContain("setFormDisabled(true)");
+    expect(script).toContain("setButtonsDisabled(true)");
   });
 
-  it("opens a status-specific modal instead of submitting directly from the trigger buttons", () => {
+  it("submits directly from the form (Kelaman/Kelmayman are plain submit buttons)", () => {
     const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
 
-    expect(script).toContain("function openModal(status)");
+    expect(script).toContain('form.addEventListener("submit"');
+    expect(script).not.toContain("data-rsvp-buttons");
+  });
+
+  it("shows the thank-you message in the modal after a successful submit", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
+
+    expect(script).toContain("function openThankYouModal(status)");
     expect(script).toContain("data-rsvp-modal-overlay");
-    expect(script).toContain(JSON.stringify(labels.modalComingTitle));
-    expect(script).toContain(JSON.stringify(labels.modalNotComingTitle));
+    expect(script).toContain("data-rsvp-modal-message");
+    expect(script).toContain(JSON.stringify(labels.comingThankYou));
+    expect(script).toContain(JSON.stringify(labels.notComingThankYou));
   });
 
   it("persists this invitation's response status under a slug-scoped key", () => {
@@ -50,11 +56,11 @@ describe("renderClientScript", () => {
     expect(script).toContain(JSON.stringify("taklifnoma_rsvp_status_a-b"));
   });
 
-  it("shows the already-responded state on load when a status was previously saved", () => {
+  it("shows the already-responded state (inline, not the modal) on load when a status was previously saved", () => {
     const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
 
     expect(script).toContain("var savedStatus = getSavedStatus();");
-    expect(script).toContain("if (savedStatus) showRespondedState(savedStatus, false);");
+    expect(script).toContain("if (savedStatus) showRespondedState(savedStatus);");
     expect(script).toContain(JSON.stringify(labels.alreadyRespondedComing));
     expect(script).toContain(JSON.stringify(labels.alreadyRespondedNotComing));
   });

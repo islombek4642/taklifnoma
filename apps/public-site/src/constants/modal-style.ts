@@ -92,60 +92,11 @@ export const MODAL_STYLE = `
     margin: 1.25rem auto 0;
   }
 
-  .taklifnoma-modal__title {
-    margin: 0 0 1.5rem;
-    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
-    font-size: 1.2rem;
-    line-height: 1.4;
-  }
-
-  .taklifnoma-modal__form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  .taklifnoma-modal__form input {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border-radius: 14px;
-    border: 1.5px solid var(--border, #e8ddd0);
-    background: var(--bg, #fbf3ea);
-    color: var(--text, #2b2320);
-    font-size: 1rem;
-    text-align: center;
-  }
-
-  .taklifnoma-modal__error {
+  .taklifnoma-modal__message {
     margin: 0;
-    color: #b3261e;
-    font-size: 0.85rem;
-  }
-
-  .taklifnoma-modal__confirm {
-    padding: 0.85rem 1.5rem;
-    border: none;
-    border-radius: 999px;
-    background: var(--accent, #b5673c);
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .taklifnoma-modal__confirm:disabled {
-    opacity: 0.6;
-    cursor: default;
-  }
-
-  .taklifnoma-modal__cancel {
-    padding: 0.5rem;
-    border: none;
-    background: transparent;
-    color: var(--text-muted, #8a7d70);
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    font-size: 1.15rem;
+    line-height: 1.5;
   }
 
   .taklifnoma-rsvp-change {

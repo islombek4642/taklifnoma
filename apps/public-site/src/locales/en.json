@@ -15,10 +15,6 @@
     "alreadyRespondedComing": "You've already responded \"I'll be there\".",
     "alreadyRespondedNotComing": "You've already responded \"Can't make it\".",
     "changeResponse": "Change response",
-    "modalComingTitle": "Confirm that you're coming?",
-    "modalNotComingTitle": "Confirm that you can't make it?",
-    "confirmButton": "Confirm",
-    "cancelButton": "Cancel",
     "modalClose": "Close"
   },
   "music": { "toggleLabel": "Music" },
