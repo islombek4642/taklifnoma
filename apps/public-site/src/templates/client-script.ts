@@ -198,20 +198,34 @@ export function renderClientScript(
     });
   }
 
-  // Never autoplays — browsers block audio with sound until the guest
-  // interacts with the page anyway, so playback only starts from this
-  // click. The wave bars (an always-inlined, template-agnostic style) show
-  // only while playing, driven purely by this one class toggle.
   var musicButton = document.querySelector("[data-music-toggle]");
   var musicAudio = document.querySelector("[data-music-audio]");
   if (musicButton && musicAudio) {
+    var setPlayingState = function (playing) {
+      if (playing) {
+        musicButton.classList.add("taklifnoma-music-toggle--playing");
+      } else {
+        musicButton.classList.remove("taklifnoma-music-toggle--playing");
+      }
+    };
+
+    // Tries to start music the moment the page loads. Browsers only allow
+    // this for audio that starts muted, or once the guest has already
+    // interacted with the page/site — so this can silently fail (no error,
+    // audio just stays paused), which is why the button below is still
+    // always there as a fallback: tapping it always works, autoplay or not.
+    var autoplayAttempt = musicAudio.play();
+    if (autoplayAttempt && typeof autoplayAttempt.then === "function") {
+      autoplayAttempt.then(function () { setPlayingState(true); }).catch(function () {});
+    }
+
     musicButton.addEventListener("click", function () {
       if (musicAudio.paused) {
         musicAudio.play();
-        musicButton.classList.add("taklifnoma-music-toggle--playing");
+        setPlayingState(true);
       } else {
         musicAudio.pause();
-        musicButton.classList.remove("taklifnoma-music-toggle--playing");
+        setPlayingState(false);
       }
     });
   }

@@ -80,17 +80,25 @@ describe("renderClientScript", () => {
     expect(script.indexOf("if (previewMode) {")).toBeLessThan(script.indexOf("fetch("));
   });
 
-  it("only starts music playback from the toggle's click handler (never on its own)", () => {
+  it("attempts to autoplay music on load, outside of and before the click handler", () => {
     const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
 
-    expect(script.match(/musicAudio\.play\(\)/g)).toHaveLength(1);
-    expect(script.indexOf("musicButton.addEventListener")).toBeLessThan(script.indexOf("musicAudio.play()"));
+    expect(script.match(/musicAudio\.play\(\)/g)).toHaveLength(2);
+    expect(script.indexOf("var autoplayAttempt")).toBeLessThan(script.indexOf("musicButton.addEventListener"));
   });
 
-  it("toggles the shared, template-agnostic playing class on the music button", () => {
+  it("silently swallows a blocked autoplay attempt instead of throwing (browsers reject it without a prior user gesture)", () => {
     const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
 
-    expect(script).toContain('classList.add("taklifnoma-music-toggle--playing")');
+    expect(() => new Function(script)).not.toThrow();
+    expect(script).toContain(".catch(function () {})");
+  });
+
+  it("toggles the shared, template-agnostic playing class on the music button, from both autoplay and the click handler", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
+
+    expect(script.match(/classList\.add\("taklifnoma-music-toggle--playing"\)/g)?.length).toBeGreaterThanOrEqual(1);
     expect(script).toContain('classList.remove("taklifnoma-music-toggle--playing")');
+    expect(script).toContain("setPlayingState(true)");
   });
 });

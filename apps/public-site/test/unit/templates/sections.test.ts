@@ -100,7 +100,7 @@ describe("renderMusicSection", () => {
     expect(html).toContain('src="/media/music/romantic-piano/track.wav"');
   });
 
-  it("never autoplays — playback only starts from the guest's own click, in client-script.ts", () => {
+  it("has no autoplay HTML attribute — autoplay is attempted via JS in client-script.ts instead, so a blocked attempt can be handled gracefully", () => {
     const html = renderMusicSection(t, "/media/music/romantic-piano/track.wav");
 
     expect(html).not.toContain("autoplay");
