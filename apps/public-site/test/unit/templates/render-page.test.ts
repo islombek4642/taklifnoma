@@ -61,7 +61,14 @@ describe("renderInvitationPage", () => {
     const html = renderInvitationPage(invitation, t, "", undefined);
 
     expect(html).not.toContain("<audio");
-    expect(html).not.toContain('<button class="music-toggle"');
+    expect(html).not.toContain('<button class="taklifnoma-music-toggle"');
+  });
+
+  it("always inlines the shared music toggle's wave-bar style, regardless of the active template", () => {
+    const html = renderInvitationPage(invitation, t, "body { color: blue; }", undefined);
+
+    expect(html).toContain("taklifnoma-music-toggle__wave");
+    expect(html).toContain("taklifnoma-music-wave");
   });
 });
 

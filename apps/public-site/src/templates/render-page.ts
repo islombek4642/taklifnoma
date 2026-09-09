@@ -9,6 +9,7 @@ import { renderRsvpSection } from "./sections/rsvp.js";
 import { renderMusicSection } from "./sections/music.js";
 import { MODAL_STYLE } from "../constants/modal-style.js";
 import { PREVIEW_BADGE_STYLE } from "../constants/preview-badge-style.js";
+import { MUSIC_TOGGLE_STYLE } from "../constants/music-toggle-style.js";
 
 export interface RenderInvitationPageOptions {
   // Set for the template-preview page ("Ko'rish" from the Mini App's
@@ -51,6 +52,7 @@ export function renderInvitationPage(
 <title>${escapeHtml(title)}</title>
 <style>${styleCss}</style>
 <style>${MODAL_STYLE}</style>
+<style>${MUSIC_TOGGLE_STYLE}</style>
 ${previewMode ? `<style>${PREVIEW_BADGE_STYLE}</style>` : ""}
 </head>
 <body>

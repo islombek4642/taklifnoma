@@ -79,4 +79,18 @@ describe("renderClientScript", () => {
     expect(script).toContain("if (previewMode) {");
     expect(script.indexOf("if (previewMode) {")).toBeLessThan(script.indexOf("fetch("));
   });
+
+  it("only starts music playback from the toggle's click handler (never on its own)", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
+
+    expect(script.match(/musicAudio\.play\(\)/g)).toHaveLength(1);
+    expect(script.indexOf("musicButton.addEventListener")).toBeLessThan(script.indexOf("musicAudio.play()"));
+  });
+
+  it("toggles the shared, template-agnostic playing class on the music button", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
+
+    expect(script).toContain('classList.add("taklifnoma-music-toggle--playing")');
+    expect(script).toContain('classList.remove("taklifnoma-music-toggle--playing")');
+  });
 });

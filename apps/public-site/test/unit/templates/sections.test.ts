@@ -90,12 +90,20 @@ describe("renderRsvpSection", () => {
 });
 
 describe("renderMusicSection", () => {
-  it("renders the toggle and audio element for a resolved track file url", () => {
+  it("renders the toggle (with an icon and animated wave bars) and audio element for a resolved track file url", () => {
     const html = renderMusicSection(t, "/media/music/romantic-piano/track.wav");
 
     expect(html).toContain("data-music-toggle");
+    expect(html).toContain("taklifnoma-music-toggle__icon");
+    expect(html).toContain("taklifnoma-music-toggle__wave");
     expect(html).toContain("data-music-audio");
     expect(html).toContain('src="/media/music/romantic-piano/track.wav"');
+  });
+
+  it("never autoplays — playback only starts from the guest's own click, in client-script.ts", () => {
+    const html = renderMusicSection(t, "/media/music/romantic-piano/track.wav");
+
+    expect(html).not.toContain("autoplay");
   });
 
   it("renders nothing when no track file url is given", () => {
