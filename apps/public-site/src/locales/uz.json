@@ -29,5 +29,48 @@
     "brideName": "Malika",
     "venueName": "Bahor to'yxonasi",
     "venueAddress": "Toshkent shahri"
+  },
+  "landing": {
+    "meta": {
+      "title": "Taklifnoma — onlayn to'y taklifnomasi",
+      "description": "Bir necha daqiqada chiroyli to'y taklifnomangizni yarating, mehmonlar bilan ulashing va RSVP javoblarini kuzating."
+    },
+    "hero": {
+      "eyebrow": "Telegram orqali",
+      "title": "O'z to'y taklifnomangizni bir necha daqiqada yarating",
+      "subtitle": "Shablon tanlang, ma'lumotlarni kiriting va mehmonlaringiz bilan chiroyli havola ulashing — hammasi Telegram bot ichida.",
+      "cta": "Botni ochish"
+    },
+    "features": {
+      "title": "Nega Taklifnoma?",
+      "items": {
+        "templates": { "title": "Chiroyli shablonlar", "text": "Turli uslubdagi tayyor dizaynlardan birini tanlang" },
+        "rsvp": { "title": "RSVP kuzatuvi", "text": "Mehmonlar kelish-kelmasligini bildiradi, siz darhol bilib olasiz" },
+        "share": { "title": "Oson ulashish", "text": "Bitta havola orqali barcha mehmonlaringizga yuboring" },
+        "free": { "title": "Tez va qulay", "text": "Ro'yxatdan o'tishsiz, to'g'ridan-to'g'ri Telegram ichida" }
+      }
+    },
+    "howItWorks": {
+      "title": "Qanday ishlaydi",
+      "steps": {
+        "1": { "title": "Botni oching", "text": "Pastdagi tugma orqali Telegram botini ishga tushiring" },
+        "2": { "title": "Ma'lumot kiriting", "text": "Ism, sana, joy va shablonni tanlang" },
+        "3": { "title": "Ulashing", "text": "Tayyor havolani mehmonlaringizga yuboring" },
+        "4": { "title": "Javoblarni kuzating", "text": "Kim kelishini real vaqtda ko'rib boring" }
+      }
+    },
+    "templates": {
+      "title": "Shablonlarni ko'ring",
+      "subtitle": "Har biri o'ziga xos uslubda",
+      "viewButton": "Ko'rish"
+    },
+    "finalCta": {
+      "title": "Hoziroq boshlang",
+      "subtitle": "Taklifnomangiz bir necha daqiqada tayyor bo'ladi",
+      "button": "Botni ochish"
+    },
+    "footer": {
+      "text": "© {{year}} Taklifnoma"
+    }
   }
 }

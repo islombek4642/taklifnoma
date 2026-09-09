@@ -3,6 +3,7 @@ import type { AppDependencies } from "./types.js";
 import { createI18n } from "./i18n/i18n.js";
 import { renderInvitationPage } from "./templates/render-page.js";
 import { renderNotFoundPage } from "./templates/render-not-found.js";
+import { renderLandingPage } from "./templates/render-landing.js";
 import { RsvpSubmissionError } from "./services/backend-api-client.js";
 import { FALLBACK_STYLE } from "./constants/fallback-style.js";
 import { buildPreviewInvitation } from "./constants/preview-sample.js";
@@ -31,6 +32,16 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
     }
 
     reply.type(media.contentType).send(Buffer.from(media.body));
+  });
+
+  // The bare domain ("/") is the product's own marketing page — opened
+  // directly, or indexed by search engines — distinct from any single
+  // invitation's "/{slug}" page, so it must not fall through to the
+  // generic not-found page the way an unknown slug does.
+  app.get("/", async (_request, reply) => {
+    reply.header("cache-control", "no-store");
+    const templates = await deps.backendApiClient.getTemplates();
+    reply.type("text/html").send(renderLandingPage(t, templates, deps.botUsername));
   });
 
   // Lets the Mini App's template gallery show what a template actually
