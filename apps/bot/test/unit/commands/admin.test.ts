@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { createI18n } from "../../../src/i18n/i18n.js";
-import { buildAdminMenuKeyboard, buildAdminPanelKeyboard, buildCancelKeyboard, isAdmin, resolveAudioExtension } from "../../../src/commands/admin.js";
-import { ADMIN_CALLBACKS } from "../../../src/constants/admin.js";
+import {
+  buildAdminMenuKeyboard,
+  buildAdminStartKeyboard,
+  buildCancelKeyboard,
+  isAdmin,
+  resolveAudioExtension,
+} from "../../../src/commands/admin.js";
 
 const i18n = createI18n();
 const t = i18n.t.bind(i18n);
@@ -40,29 +45,28 @@ describe("resolveAudioExtension", () => {
   });
 });
 
-describe("buildAdminPanelKeyboard", () => {
-  it("has a single reply-keyboard button with the panel label", () => {
-    const keyboard = buildAdminPanelKeyboard(t);
+describe("buildAdminStartKeyboard", () => {
+  it("has a web_app button and the admin panel button, each on its own row", () => {
+    const keyboard = buildAdminStartKeyboard(t, "https://example.com/app");
 
-    expect(keyboard.keyboard[0]?.[0]).toEqual({ text: "🛠 Admin panel" });
+    expect(keyboard.keyboard[0]?.[0]).toMatchObject({ text: "Taklifnoma yaratish" });
+    expect(keyboard.keyboard[1]?.[0]).toEqual({ text: "🛠 Admin panel" });
   });
 });
 
 describe("buildAdminMenuKeyboard", () => {
-  it("has an inline button wired to the add-music callback", () => {
+  it("puts the add-music and add-template buttons on one row, and back on its own", () => {
     const keyboard = buildAdminMenuKeyboard(t);
-    const button = keyboard.inline_keyboard[0]?.[0];
 
-    expect(button?.text).toBe("🎵 Musiqa qo'shish");
-    expect(button && "callback_data" in button ? button.callback_data : undefined).toBe(ADMIN_CALLBACKS.ADD_MUSIC);
+    expect(keyboard.keyboard[0]).toEqual([{ text: "🎵 Musiqa qo'shish" }, { text: "🖼 Shablon qo'shish" }]);
+    expect(keyboard.keyboard[1]).toEqual([{ text: "⬅️ Orqaga" }]);
   });
 });
 
 describe("buildCancelKeyboard", () => {
-  it("has an inline button wired to the cancel callback", () => {
+  it("has a single reply-keyboard button with the cancel label", () => {
     const keyboard = buildCancelKeyboard(t);
-    const button = keyboard.inline_keyboard[0]?.[0];
 
-    expect(button && "callback_data" in button ? button.callback_data : undefined).toBe(ADMIN_CALLBACKS.CANCEL);
+    expect(keyboard.keyboard[0]).toEqual([{ text: "Bekor qilish" }]);
   });
 });

@@ -1,6 +1,5 @@
-import { InlineKeyboard, Keyboard, type Bot } from "grammy";
+import { Keyboard, type Bot } from "grammy";
 import type { TFunction } from "i18next";
-import { ADMIN_CALLBACKS } from "../constants/admin.js";
 import { ALLOWED_AUDIO_EXTENSIONS, AUDIO_MIME_TO_EXTENSION } from "../constants/audio.js";
 import { createBackendAdminClient, type BackendAdminClient } from "../services/backend-admin-client.js";
 
@@ -10,6 +9,7 @@ export interface RegisterAdminPanelOptions {
   adminTelegramIds: number[];
   backendApiBaseUrl: string;
   botToken: string;
+  miniAppUrl: string;
   t: TFunction;
 }
 
@@ -17,16 +17,24 @@ export function isAdmin(adminTelegramIds: number[], userId: number | undefined):
   return userId !== undefined && adminTelegramIds.includes(userId);
 }
 
-export function buildAdminPanelKeyboard(t: TFunction): Keyboard {
-  return new Keyboard().text(t("admin.panelButton")).resized();
+// The admin's /start reply fully replaces the normal one (rather than
+// adding a second message) — it carries the same "open app" action as a
+// reply-keyboard web_app button, alongside the admin panel entry point.
+export function buildAdminStartKeyboard(t: TFunction, miniAppUrl: string): Keyboard {
+  return new Keyboard().webApp(t("start.openApp"), miniAppUrl).row().text(t("admin.panelButton")).resized();
 }
 
-export function buildAdminMenuKeyboard(t: TFunction): InlineKeyboard {
-  return new InlineKeyboard().text(t("admin.addMusicButton"), ADMIN_CALLBACKS.ADD_MUSIC);
+export function buildAdminMenuKeyboard(t: TFunction): Keyboard {
+  return new Keyboard()
+    .text(t("admin.addMusicButton"))
+    .text(t("admin.addTemplateButton"))
+    .row()
+    .text(t("admin.backButton"))
+    .resized();
 }
 
-export function buildCancelKeyboard(t: TFunction): InlineKeyboard {
-  return new InlineKeyboard().text(t("admin.cancelButton"), ADMIN_CALLBACKS.CANCEL);
+export function buildCancelKeyboard(t: TFunction): Keyboard {
+  return new Keyboard().text(t("admin.cancelButton")).resized();
 }
 
 interface AudioLikeMedia {
@@ -48,19 +56,21 @@ export function resolveAudioExtension(media: AudioLikeMedia): (typeof ALLOWED_AU
 }
 
 export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions): void {
-  const { adminTelegramIds, backendApiBaseUrl, botToken, t } = options;
+  const { adminTelegramIds, backendApiBaseUrl, botToken, miniAppUrl, t } = options;
   if (adminTelegramIds.length === 0) return;
 
   const adminClient: BackendAdminClient = createBackendAdminClient(backendApiBaseUrl, botToken);
   const sessions = new Map<number, AdminSession>();
 
-  // Shown alongside (not instead of) the normal /start reply, and only to
-  // allowlisted admins — everyone else's /start is untouched.
+  // Fully replaces the normal /start reply for admins (does not call
+  // next()) so they get one message carrying both the "open app" action
+  // and the admin panel entry point, both as reply-keyboard buttons.
   bot.command("start", async (ctx, next) => {
-    if (isAdmin(adminTelegramIds, ctx.from?.id)) {
-      await ctx.reply(t("admin.panelIntro"), { reply_markup: buildAdminPanelKeyboard(t) });
+    if (!isAdmin(adminTelegramIds, ctx.from?.id)) {
+      await next();
+      return;
     }
-    await next();
+    await ctx.reply(t("start.welcome"), { reply_markup: buildAdminStartKeyboard(t, miniAppUrl) });
   });
 
   bot.hears(t("admin.panelButton"), async (ctx, next) => {
@@ -71,18 +81,39 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
     await ctx.reply(t("admin.menuTitle"), { reply_markup: buildAdminMenuKeyboard(t) });
   });
 
-  bot.callbackQuery(ADMIN_CALLBACKS.ADD_MUSIC, async (ctx) => {
-    await ctx.answerCallbackQuery();
-    if (!isAdmin(adminTelegramIds, ctx.from.id)) return;
+  bot.hears(t("admin.backButton"), async (ctx, next) => {
+    if (!ctx.from || !isAdmin(adminTelegramIds, ctx.from.id)) {
+      await next();
+      return;
+    }
+    sessions.delete(ctx.from.id);
+    await ctx.reply(t("start.welcome"), { reply_markup: buildAdminStartKeyboard(t, miniAppUrl) });
+  });
 
+  bot.hears(t("admin.addMusicButton"), async (ctx, next) => {
+    if (!ctx.from || !isAdmin(adminTelegramIds, ctx.from.id)) {
+      await next();
+      return;
+    }
     sessions.set(ctx.from.id, { step: "awaiting-title" });
     await ctx.reply(t("admin.askTitle"), { reply_markup: buildCancelKeyboard(t) });
   });
 
-  bot.callbackQuery(ADMIN_CALLBACKS.CANCEL, async (ctx) => {
+  bot.hears(t("admin.addTemplateButton"), async (ctx, next) => {
+    if (!ctx.from || !isAdmin(adminTelegramIds, ctx.from.id)) {
+      await next();
+      return;
+    }
+    await ctx.reply(t("admin.templateComingSoon"), { reply_markup: buildAdminMenuKeyboard(t) });
+  });
+
+  bot.hears(t("admin.cancelButton"), async (ctx, next) => {
+    if (!ctx.from || !isAdmin(adminTelegramIds, ctx.from.id)) {
+      await next();
+      return;
+    }
     sessions.delete(ctx.from.id);
-    await ctx.answerCallbackQuery();
-    await ctx.reply(t("admin.cancelled"));
+    await ctx.reply(t("admin.cancelled"), { reply_markup: buildAdminMenuKeyboard(t) });
   });
 
   bot.on("message:text", async (ctx, next) => {
@@ -131,7 +162,7 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
 
       const track = await adminClient.createMusicTrack(session.title, fileBytes, extension);
       sessions.delete(userId);
-      await ctx.reply(t("admin.uploadSuccess", { title: track.title }));
+      await ctx.reply(t("admin.uploadSuccess", { title: track.title }), { reply_markup: buildAdminMenuKeyboard(t) });
     } catch {
       await ctx.reply(t("admin.uploadError"));
     }

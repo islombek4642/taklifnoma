@@ -15,9 +15,10 @@ export interface CreateBotOptions {
 export function createBot(options: CreateBotOptions): Bot {
   const { botToken, miniAppUrl, backendApiBaseUrl, adminTelegramIds, t } = options;
   const bot = new Bot(botToken);
-  // Registered first so its /start hook (admin-only, calls next()) runs
-  // before the normal start reply below.
-  registerAdminPanel(bot, { adminTelegramIds, backendApiBaseUrl, botToken, t });
+  // Registered first so its /start hook runs before the normal one below —
+  // for admins it fully replaces that reply (does not call next()); for
+  // everyone else it calls next() so the normal start reply still fires.
+  registerAdminPanel(bot, { adminTelegramIds, backendApiBaseUrl, botToken, miniAppUrl, t });
   registerStartCommand(bot, miniAppUrl, t);
   registerHelpCommand(bot, t);
   return bot;
