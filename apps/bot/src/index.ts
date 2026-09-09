@@ -2,6 +2,7 @@ import { loadEnvConfig } from "./config/env-config.js";
 import { createI18n } from "./i18n/i18n.js";
 import { createBot } from "./bot.js";
 import { registerCommandMenu } from "./commands/command-menu.js";
+import { resetMenuButtonToDefault } from "./commands/menu-button.js";
 
 const config = loadEnvConfig();
 const i18n = createI18n();
@@ -15,6 +16,7 @@ const bot = createBot({
 });
 
 await registerCommandMenu(bot, t);
+await resetMenuButtonToDefault(bot);
 
 bot
   .start({ onStart: () => console.log("Bot started (long polling)") })
