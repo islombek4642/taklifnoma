@@ -35,10 +35,6 @@ export function buildAdminMenuKeyboard(t: TFunction): Keyboard {
     .resized();
 }
 
-export function buildCancelKeyboard(t: TFunction): Keyboard {
-  return new Keyboard().text(t("admin.cancelButton")).resized();
-}
-
 interface AudioLikeMedia {
   file_name?: string;
   mime_type?: string;
@@ -98,7 +94,7 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
       return;
     }
     sessions.set(ctx.from.id, { step: "awaiting-title" });
-    await ctx.reply(t("admin.askTitle"), { reply_markup: buildCancelKeyboard(t) });
+    await ctx.reply(t("admin.askTitle"), { reply_markup: buildAdminMenuKeyboard(t) });
   });
 
   bot.hears(t("admin.addTemplateButton"), async (ctx, next) => {
@@ -107,15 +103,6 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
       return;
     }
     await ctx.reply(t("admin.templateComingSoon"), { reply_markup: buildAdminMenuKeyboard(t) });
-  });
-
-  bot.hears(t("admin.cancelButton"), async (ctx, next) => {
-    if (!ctx.from || !isAdmin(adminTelegramIds, ctx.from.id)) {
-      await next();
-      return;
-    }
-    sessions.delete(ctx.from.id);
-    await ctx.reply(t("admin.cancelled"), { reply_markup: buildAdminMenuKeyboard(t) });
   });
 
   bot.on("message:text", async (ctx, next) => {
@@ -133,7 +120,7 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
     }
 
     sessions.set(userId, { step: "awaiting-file", title });
-    await ctx.reply(t("admin.askFile", { title }), { reply_markup: buildCancelKeyboard(t) });
+    await ctx.reply(t("admin.askFile", { title }), { reply_markup: buildAdminMenuKeyboard(t) });
   });
 
   bot.on(["message:audio", "message:document"], async (ctx, next) => {
@@ -158,9 +145,10 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
 
     // Edited in place rather than followed by a separate result message,
     // so the "Yuklanmoqda..." bubble turns into the outcome instead of
-    // lingering alongside it (Telegram can't attach a reply keyboard to an
-    // edited message, so the submenu keyboard from the previous step stays
-    // as-is until the admin's next tap).
+    // lingering alongside it. The submenu keyboard set by the askTitle/
+    // askFile replies is left alone here — Telegram can't attach a reply
+    // keyboard to an edited message anyway — which is fine since it's
+    // already the right one (the admin never left the submenu).
     const statusMessage = await ctx.reply(t("admin.uploading"));
     try {
       const file = await ctx.getFile();

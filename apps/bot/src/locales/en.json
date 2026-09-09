@@ -18,8 +18,6 @@
     "addTemplateButton": "🖼 Add template",
     "templateComingSoon": "Adding templates is still being built. It'll be available soon.",
     "backButton": "⬅️ Back",
-    "cancelButton": "Cancel",
-    "cancelled": "Cancelled.",
     "askTitle": "Type a name for the new track.",
     "titleRequired": "Please enter a name for the track.",
     "askFile": "Send the audio file for \"{{title}}\".",

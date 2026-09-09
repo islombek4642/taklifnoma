@@ -18,8 +18,6 @@
     "addTemplateButton": "🖼 Shablon qo'shish",
     "templateComingSoon": "Shablon qo'shish funksiyasi hali ishlab chiqilmoqda. Tez orada qo'shiladi.",
     "backButton": "⬅️ Orqaga",
-    "cancelButton": "Bekor qilish",
-    "cancelled": "Bekor qilindi.",
     "askTitle": "Yangi musiqaning nomini yozing.",
     "titleRequired": "Iltimos, musiqa nomini yozing.",
     "askFile": "\"{{title}}\" nomli musiqa faylini (audio) yuboring.",
