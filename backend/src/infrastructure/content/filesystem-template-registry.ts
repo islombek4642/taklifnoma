@@ -4,7 +4,12 @@ import type { TemplateDto, TemplateRegistry } from "../../application/ports/cont
 
 interface TemplateManifest {
   name: string;
-  description: string;
+  // Optional: manifests written before this field existed (already sitting
+  // in a deployed CONTENT_DIR — seeding never overwrites an existing
+  // folder) won't have it. Missing it must never crash a page that lists
+  // templates, so it's read defensively below rather than trusted as
+  // always-present the way the type here would otherwise suggest.
+  description?: string;
   accentColor: string;
 }
 
@@ -42,7 +47,7 @@ export class FilesystemTemplateRegistry implements TemplateRegistry {
       const manifestRaw = await readFile(path.join(dir, "manifest.json"), "utf-8");
       const manifest = JSON.parse(manifestRaw) as TemplateManifest;
       const styleCss = await readFile(path.join(dir, "style.css"), "utf-8");
-      return { id, name: manifest.name, description: manifest.description, accentColor: manifest.accentColor, styleCss };
+      return { id, name: manifest.name, description: manifest.description ?? "", accentColor: manifest.accentColor, styleCss };
     } catch {
       return null;
     }
