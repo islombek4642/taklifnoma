@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronRight } from "lucide-react";
 import { useBuilderForm } from "./useBuilderForm.js";
@@ -7,23 +8,33 @@ import { DateTimeStep } from "./steps/DateTimeStep.js";
 import { VenueStep } from "./steps/VenueStep.js";
 import { GreetingStep } from "./steps/GreetingStep.js";
 import { MusicStep } from "./steps/MusicStep.js";
-import { TemplateStep } from "./steps/TemplateStep.js";
 import { TopBar } from "../../components/TopBar.js";
 import { ProgressSteps } from "../../components/ProgressSteps.js";
 import { Button } from "../../components/Button.js";
 import { BUILDER_STEP_COUNT } from "./builder-form.js";
 import "./BuilderScreen.css";
 
-const STEP_COMPONENTS = [NamesStep, DateTimeStep, VenueStep, GreetingStep, MusicStep, TemplateStep];
-const STEP_KEYS = ["names", "dateTime", "venue", "greeting", "music", "template"];
+const STEP_COMPONENTS = [NamesStep, DateTimeStep, VenueStep, GreetingStep, MusicStep];
+const STEP_KEYS = ["names", "dateTime", "venue", "greeting", "music"];
 
 export function BuilderScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialTemplateId = (location.state as { templateId?: string } | null)?.templateId;
   const { mode, step, form, updateField, canGoNext, isLastStep, goNext, goBack, submit, submitting, error } =
-    useBuilderForm();
+    useBuilderForm(initialTemplateId);
+
+  // A template is chosen on the Home screen's gallery before landing here;
+  // if someone reaches /builder in create mode without one (a stale link,
+  // a manual URL edit), there's nothing to build against, so send them
+  // back to pick one.
+  useEffect(() => {
+    if (mode === "create" && !form.templateId) navigate("/", { replace: true });
+  }, [mode, form.templateId, navigate]);
 
   if (mode === "loading") return <p className="builder-status-text">{t("home.loading")}</p>;
+  if (mode === "create" && !form.templateId) return null;
 
   const StepComponent = STEP_COMPONENTS[step];
 

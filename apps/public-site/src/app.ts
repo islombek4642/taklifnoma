@@ -5,6 +5,7 @@ import { renderInvitationPage } from "./templates/render-page.js";
 import { renderNotFoundPage } from "./templates/render-not-found.js";
 import { RsvpSubmissionError } from "./services/backend-api-client.js";
 import { FALLBACK_STYLE } from "./constants/fallback-style.js";
+import { buildPreviewInvitation } from "./constants/preview-sample.js";
 
 export function buildApp(deps: AppDependencies): FastifyInstance {
   const app = Fastify({ logger: false });
@@ -30,6 +31,24 @@ export function buildApp(deps: AppDependencies): FastifyInstance {
     }
 
     reply.type(media.contentType).send(Buffer.from(media.body));
+  });
+
+  // Lets the Mini App's template gallery show what a template actually
+  // looks like ("Ko'rish") before the guest commits to it — a real
+  // invitation page rendered with sample content instead of a real one.
+  app.get("/preview/:templateId", async (request, reply) => {
+    reply.header("cache-control", "no-store");
+    const { templateId } = request.params as { templateId: string };
+    const templates = await deps.backendApiClient.getTemplates();
+    const template = templates.find((candidate) => candidate.id === templateId);
+
+    if (!template) {
+      reply.code(404).type("text/html").send(renderNotFoundPage(t));
+      return;
+    }
+
+    const invitation = buildPreviewInvitation(templateId, t);
+    reply.type("text/html").send(renderInvitationPage(invitation, t, template.styleCss, undefined, { previewMode: true }));
   });
 
   app.get("/:slug", async (request, reply) => {

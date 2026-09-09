@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { seedContentDir } from "../../../src/infrastructure/content/seed-content-dir.js";
+import { FilesystemTemplateRegistry } from "../../../src/infrastructure/content/filesystem-template-registry.js";
 
 let contentDir: string;
 
@@ -31,6 +32,21 @@ describe("seedContentDir", () => {
     expect(await exists(path.join(contentDir, "templates", "classic", "style.css"))).toBe(true);
     expect(await exists(path.join(contentDir, "music", "romantic-piano", "track.wav"))).toBe(true);
     expect(await exists(path.join(contentDir, "music", "gentle-strings", "track.wav"))).toBe(true);
+  });
+
+  it("seeds every bundled template with a valid, non-empty manifest and stylesheet", async () => {
+    await seedContentDir(contentDir);
+
+    const templates = await new FilesystemTemplateRegistry(contentDir).list();
+    const ids = templates.map((template) => template.id).sort();
+
+    expect(ids).toEqual(["classic", "lake-como-letters", "wedding-cinema"]);
+    for (const template of templates) {
+      expect(template.name.length).toBeGreaterThan(0);
+      expect(template.description.length).toBeGreaterThan(0);
+      expect(template.accentColor).toMatch(/^#[0-9a-f]{6}$/i);
+      expect(template.styleCss.length).toBeGreaterThan(0);
+    }
   });
 
   it("never overwrites a folder that already exists at that id", async () => {

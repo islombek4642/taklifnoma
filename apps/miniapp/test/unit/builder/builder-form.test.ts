@@ -23,14 +23,9 @@ describe("isStepValid", () => {
     expect(isStepValid(3, INITIAL_BUILDER_FORM_STATE)).toBe(true);
   });
 
-  it("requires a music track on step 4", () => {
+  it("requires a music track on step 4 (the last step — the template is chosen before entering the builder)", () => {
     expect(isStepValid(4, INITIAL_BUILDER_FORM_STATE)).toBe(false);
     expect(isStepValid(4, { ...INITIAL_BUILDER_FORM_STATE, musicTrackId: "romantic-piano" })).toBe(true);
-  });
-
-  it("requires a template on step 5", () => {
-    expect(isStepValid(5, INITIAL_BUILDER_FORM_STATE)).toBe(false);
-    expect(isStepValid(5, { ...INITIAL_BUILDER_FORM_STATE, templateId: "classic" })).toBe(true);
   });
 });
 

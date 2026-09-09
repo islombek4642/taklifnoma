@@ -58,4 +58,19 @@ describe("renderClientScript", () => {
     expect(script).toContain(JSON.stringify(labels.alreadyRespondedComing));
     expect(script).toContain(JSON.stringify(labels.alreadyRespondedNotComing));
   });
+
+  it("defaults to non-preview mode when no options are given", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels);
+
+    expect(script).toContain("var previewMode = false;");
+  });
+
+  it("in preview mode, skips the network request and simulates success locally on submit", () => {
+    const script = renderClientScript("a-b", "2026-11-11T17:00:00.000Z", labels, { previewMode: true });
+
+    expect(() => new Function(script)).not.toThrow();
+    expect(script).toContain("var previewMode = true;");
+    expect(script).toContain("if (previewMode) {");
+    expect(script.indexOf("if (previewMode) {")).toBeLessThan(script.indexOf("fetch("));
+  });
 });

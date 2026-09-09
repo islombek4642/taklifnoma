@@ -26,7 +26,7 @@ export const INITIAL_BUILDER_FORM_STATE: BuilderFormState = {
   templateId: "",
 };
 
-export const BUILDER_STEP_COUNT = 6;
+export const BUILDER_STEP_COUNT = 5;
 
 export function isStepValid(step: number, state: BuilderFormState): boolean {
   switch (step) {
@@ -40,8 +40,6 @@ export function isStepValid(step: number, state: BuilderFormState): boolean {
       return true;
     case 4:
       return state.musicTrackId.length > 0;
-    case 5:
-      return state.templateId.length > 0;
     default:
       return false;
   }

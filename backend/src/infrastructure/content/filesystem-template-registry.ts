@@ -4,6 +4,7 @@ import type { TemplateDto, TemplateRegistry } from "../../application/ports/cont
 
 interface TemplateManifest {
   name: string;
+  description: string;
   accentColor: string;
 }
 
@@ -41,7 +42,7 @@ export class FilesystemTemplateRegistry implements TemplateRegistry {
       const manifestRaw = await readFile(path.join(dir, "manifest.json"), "utf-8");
       const manifest = JSON.parse(manifestRaw) as TemplateManifest;
       const styleCss = await readFile(path.join(dir, "style.css"), "utf-8");
-      return { id, name: manifest.name, accentColor: manifest.accentColor, styleCss };
+      return { id, name: manifest.name, description: manifest.description, accentColor: manifest.accentColor, styleCss };
     } catch {
       return null;
     }

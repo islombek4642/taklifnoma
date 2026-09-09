@@ -4,6 +4,9 @@
     "loading": "Loading...",
     "emptyTitle": "You don't have an invitation yet",
     "emptySubtitle": "Create your own wedding invitation in just a few minutes",
+    "templatesSubtitle": "Choose one of the templates below to get started",
+    "templateViewButton": "View",
+    "templateSelectButton": "Select",
     "createButton": "Create invitation",
     "editButton": "Edit",
     "viewButton": "View",
@@ -16,8 +19,7 @@
       "dateTime": "Date & time",
       "venue": "Venue",
       "greeting": "Greeting text",
-      "music": "Background music",
-      "template": "Template"
+      "music": "Background music"
     },
     "fields": {
       "groomName": "Groom's name",
@@ -28,8 +30,7 @@
       "venueAddress": "Address",
       "mapUrl": "Map link (optional)",
       "greetingText": "Greeting text (optional)",
-      "musicTrack": "Choose music",
-      "template": "Choose invitation design"
+      "musicTrack": "Choose music"
     },
     "next": "Next",
     "back": "Back",

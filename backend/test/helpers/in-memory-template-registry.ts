@@ -1,7 +1,13 @@
 import type { TemplateDto, TemplateRegistry } from "../../src/application/ports/content-registry.js";
 
 const DEFAULT_TEMPLATES: TemplateDto[] = [
-  { id: "classic", name: "Klassik", accentColor: "#b45d52", styleCss: "body { font-family: serif; }" },
+  {
+    id: "classic",
+    name: "Klassik",
+    description: "Iliq va vaqti-hech qachon eskirmaydigan uslub",
+    accentColor: "#b45d52",
+    styleCss: "body { font-family: serif; }",
+  },
 ];
 
 export class InMemoryTemplateRegistry implements TemplateRegistry {

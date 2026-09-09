@@ -21,6 +21,7 @@ export interface RsvpInputDto {
 export interface TemplateDto {
   id: string;
   name: string;
+  description: string;
   accentColor: string;
   styleCss: string;
 }

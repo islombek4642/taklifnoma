@@ -22,5 +22,12 @@
     "modalClose": "Close"
   },
   "music": { "toggleLabel": "Music" },
-  "notFound": { "title": "Invitation not found", "subtitle": "The link may be incorrect, or the invitation may have been removed." }
+  "notFound": { "title": "Invitation not found", "subtitle": "The link may be incorrect, or the invitation may have been removed." },
+  "preview": {
+    "badge": "Preview only — this is a sample of the template's design",
+    "groomName": "Aziz",
+    "brideName": "Malika",
+    "venueName": "Bahor Wedding Hall",
+    "venueAddress": "Tashkent"
+  }
 }
