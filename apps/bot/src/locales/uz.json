@@ -9,5 +9,20 @@
   "commands": {
     "start": "Botni ishga tushirish",
     "help": "Yordam olish"
+  },
+  "admin": {
+    "panelIntro": "Admin sifatida siz pastdagi tugma orqali boshqaruv panelini ochishingiz mumkin.",
+    "panelButton": "🛠 Admin panel",
+    "menuTitle": "Admin panel — nima qilmoqchisiz?",
+    "addMusicButton": "🎵 Musiqa qo'shish",
+    "cancelButton": "Bekor qilish",
+    "cancelled": "Bekor qilindi.",
+    "askTitle": "Yangi musiqaning nomini yozing.",
+    "titleRequired": "Iltimos, musiqa nomini yozing.",
+    "askFile": "\"{{title}}\" nomli musiqa faylini (audio) yuboring.",
+    "unsupportedFile": "Bu fayl turi qo'llab-quvvatlanmaydi. Iltimos, audio fayl (mp3, wav, ogg, m4a yoki aac) yuboring.",
+    "uploading": "Yuklanmoqda...",
+    "uploadSuccess": "\"{{title}}\" muvaffaqiyatli qo'shildi va endi taklifnoma yaratishda tanlash mumkin.",
+    "uploadError": "Xatolik yuz berdi. Qaytadan urinib ko'ring."
   }
 }

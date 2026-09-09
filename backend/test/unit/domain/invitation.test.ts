@@ -25,7 +25,6 @@ describe("validateInvitationInput", () => {
     ["venueName", { ...validInput, venueName: "" }],
     ["venueAddress", { ...validInput, venueAddress: "" }],
     ["templateId", { ...validInput, templateId: "" }],
-    ["musicTrackId", { ...validInput, musicTrackId: "" }],
   ])("rejects empty %s", (field, input) => {
     try {
       validateInvitationInput(input as InvitationInput);
@@ -34,6 +33,10 @@ describe("validateInvitationInput", () => {
       expect(error).toBeInstanceOf(DomainValidationError);
       expect((error as DomainValidationError).field).toBe(field);
     }
+  });
+
+  it("accepts an empty musicTrackId — no background music is a valid choice", () => {
+    expect(() => validateInvitationInput({ ...validInput, musicTrackId: "" })).not.toThrow();
   });
 
   it("rejects an invalid eventDateTime", () => {

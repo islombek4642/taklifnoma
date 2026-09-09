@@ -1,10 +1,23 @@
-import { readFile, readdir } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { MusicRegistry, MusicTrackDto } from "../../application/ports/content-registry.js";
+import type { CreateMusicTrackInput, MusicRegistry, MusicTrackDto } from "../../application/ports/content-registry.js";
 
 interface MusicManifest {
   title: string;
   file: string;
+}
+
+// Best-effort readability for the id ("romantic-piano-a1b2c3d4" beats a
+// bare UUID) — a title with no Latin/ASCII letters (Uzbek Cyrillic, say)
+// just falls back to "track", which is fine since the random suffix below
+// is what actually guarantees uniqueness.
+function slugify(title: string): string {
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug.length > 0 ? slug : "track";
 }
 
 /**
@@ -24,6 +37,19 @@ export class FilesystemMusicRegistry implements MusicRegistry {
 
   async exists(id: string): Promise<boolean> {
     return (await this.read(id)) !== null;
+  }
+
+  async create(input: CreateMusicTrackInput): Promise<MusicTrackDto> {
+    const id = `${slugify(input.title)}-${randomUUID().slice(0, 8)}`;
+    const dir = path.join(this.musicDir, id);
+    const fileName = `track.${input.fileExtension}`;
+
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, fileName), input.fileBuffer);
+    const manifest: MusicManifest = { title: input.title, file: fileName };
+    await writeFile(path.join(dir, "manifest.json"), JSON.stringify(manifest, null, 2));
+
+    return { id, title: input.title, fileUrl: `/media/music/${id}/${fileName}` };
   }
 
   private get musicDir(): string {

@@ -30,7 +30,8 @@
       "venueAddress": "Manzil",
       "mapUrl": "Xarita havolasi (ixtiyoriy)",
       "greetingText": "Tabrik matni (ixtiyoriy)",
-      "musicTrack": "Musiqa tanlang"
+      "musicTrack": "Musiqa tanlang",
+      "musicSkip": "Musiqasiz davom etish"
     },
     "next": "Keyingi",
     "back": "Orqaga",

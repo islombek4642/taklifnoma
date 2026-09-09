@@ -39,7 +39,7 @@ export function isStepValid(step: number, state: BuilderFormState): boolean {
     case 3:
       return true;
     case 4:
-      return state.musicTrackId.length > 0;
+      return true;
     default:
       return false;
   }

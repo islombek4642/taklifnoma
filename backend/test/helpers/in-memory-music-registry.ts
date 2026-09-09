@@ -1,4 +1,4 @@
-import type { MusicRegistry, MusicTrackDto } from "../../src/application/ports/content-registry.js";
+import type { CreateMusicTrackInput, MusicRegistry, MusicTrackDto } from "../../src/application/ports/content-registry.js";
 
 const DEFAULT_TRACKS: MusicTrackDto[] = [
   { id: "romantic-piano", title: "Romantik pianino", fileUrl: "/media/music/romantic-piano/track.wav" },
@@ -6,7 +6,9 @@ const DEFAULT_TRACKS: MusicTrackDto[] = [
 ];
 
 export class InMemoryMusicRegistry implements MusicRegistry {
-  constructor(private readonly tracks: MusicTrackDto[] = DEFAULT_TRACKS) {}
+  private nextId = 0;
+
+  constructor(private readonly tracks: MusicTrackDto[] = [...DEFAULT_TRACKS]) {}
 
   async list(): Promise<MusicTrackDto[]> {
     return this.tracks;
@@ -14,5 +16,12 @@ export class InMemoryMusicRegistry implements MusicRegistry {
 
   async exists(id: string): Promise<boolean> {
     return this.tracks.some((track) => track.id === id);
+  }
+
+  async create(input: CreateMusicTrackInput): Promise<MusicTrackDto> {
+    const id = `uploaded-${this.nextId++}`;
+    const track: MusicTrackDto = { id, title: input.title, fileUrl: `/media/music/${id}/track.${input.fileExtension}` };
+    this.tracks.push(track);
+    return track;
   }
 }
