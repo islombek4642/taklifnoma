@@ -29,5 +29,48 @@
     "brideName": "Malika",
     "venueName": "Bahor Wedding Hall",
     "venueAddress": "Tashkent"
+  },
+  "landing": {
+    "meta": {
+      "title": "Taklifnoma — online wedding invitations",
+      "description": "Create a beautiful wedding invitation in minutes, share it with your guests, and track RSVP responses."
+    },
+    "hero": {
+      "eyebrow": "Right inside Telegram",
+      "title": "Create your wedding invitation in just a few minutes",
+      "subtitle": "Pick a template, fill in the details, and share a beautiful link with your guests — all inside a Telegram bot.",
+      "cta": "Open the bot"
+    },
+    "features": {
+      "title": "Why Taklifnoma?",
+      "items": {
+        "templates": { "title": "Beautiful templates", "text": "Choose from ready-made designs in different styles" },
+        "rsvp": { "title": "RSVP tracking", "text": "Guests let you know if they're coming, and you're notified instantly" },
+        "share": { "title": "Easy sharing", "text": "Send a single link to all of your guests" },
+        "free": { "title": "Fast and simple", "text": "No sign-up needed, right inside Telegram" }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "steps": {
+        "1": { "title": "Open the bot", "text": "Launch the Telegram bot using the button below" },
+        "2": { "title": "Fill in the details", "text": "Enter the names, date, venue, and pick a template" },
+        "3": { "title": "Share it", "text": "Send the finished link to your guests" },
+        "4": { "title": "Track responses", "text": "Watch who's coming in real time" }
+      }
+    },
+    "templates": {
+      "title": "Browse the templates",
+      "subtitle": "Each with its own distinct style",
+      "viewButton": "View"
+    },
+    "finalCta": {
+      "title": "Get started now",
+      "subtitle": "Your invitation will be ready in minutes",
+      "button": "Open the bot"
+    },
+    "footer": {
+      "text": "© {{year}} Taklifnoma"
+    }
   }
 }

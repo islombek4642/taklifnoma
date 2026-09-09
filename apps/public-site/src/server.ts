@@ -6,6 +6,7 @@ const config = loadEnvConfig();
 
 const app = buildApp({
   backendApiClient: createBackendApiClient(config.backendApiBaseUrl),
+  botUsername: config.botUsername,
 });
 
 app

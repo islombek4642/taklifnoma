@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { buildApp } from "../../src/app.js";
+import { buildApp as buildAppRaw } from "../../src/app.js";
+import type { AppDependencies } from "../../src/types.js";
 import { FakeBackendApiClient } from "../helpers/fake-backend-api-client.js";
 import type { PublicInvitationDto } from "../../src/services/backend-api-client.js";
+
+function buildApp(deps: Omit<AppDependencies, "botUsername"> & Partial<Pick<AppDependencies, "botUsername">>) {
+  return buildAppRaw({ botUsername: "taklifnoma_bot", ...deps });
+}
 
 const invitation: PublicInvitationDto = {
   id: "inv-1",
@@ -25,6 +30,30 @@ describe("GET /health", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.json()).toEqual({ status: "ok" });
+  });
+});
+
+describe("GET /", () => {
+  it("renders the marketing landing page with a link to the bot", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    const app = buildApp({ backendApiClient, botUsername: "my_wedding_bot" });
+
+    const response = await app.inject({ method: "GET", url: "/" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toContain("text/html");
+    expect(response.headers["cache-control"]).toBe("no-store");
+    expect(response.body).toContain("https://t.me/my_wedding_bot");
+  });
+
+  it("lists the registered templates, each linking to its live preview", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    const app = buildApp({ backendApiClient });
+
+    const response = await app.inject({ method: "GET", url: "/" });
+
+    expect(response.body).toContain('href="/preview/classic"');
+    expect(response.body).toContain("Klassik");
   });
 });
 

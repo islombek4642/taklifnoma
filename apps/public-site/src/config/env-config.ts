@@ -1,6 +1,7 @@
 export interface EnvConfig {
   backendApiBaseUrl: string;
   port: number;
+  botUsername: string;
 }
 
 export function loadEnvConfig(): EnvConfig {
@@ -14,5 +15,10 @@ export function loadEnvConfig(): EnvConfig {
     throw new Error("PORT environment variable must be a number");
   }
 
-  return { backendApiBaseUrl, port };
+  const botUsername = process.env.BOT_USERNAME;
+  if (!botUsername) {
+    throw new Error("BOT_USERNAME environment variable is required");
+  }
+
+  return { backendApiBaseUrl, port, botUsername };
 }

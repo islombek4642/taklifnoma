@@ -13,12 +13,14 @@ describe("loadEnvConfig", () => {
   });
 
   it("throws when BACKEND_API_BASE_URL is missing", () => {
+    process.env.BOT_USERNAME = "taklifnoma_bot";
     delete process.env.BACKEND_API_BASE_URL;
     expect(() => loadEnvConfig()).toThrow("BACKEND_API_BASE_URL");
   });
 
   it("defaults PORT to 4000 when not set", () => {
     process.env.BACKEND_API_BASE_URL = "http://localhost:3000";
+    process.env.BOT_USERNAME = "taklifnoma_bot";
     delete process.env.PORT;
 
     expect(loadEnvConfig().port).toBe(4000);
@@ -26,8 +28,22 @@ describe("loadEnvConfig", () => {
 
   it("parses a custom PORT", () => {
     process.env.BACKEND_API_BASE_URL = "http://localhost:3000";
+    process.env.BOT_USERNAME = "taklifnoma_bot";
     process.env.PORT = "5000";
 
     expect(loadEnvConfig().port).toBe(5000);
+  });
+
+  it("throws when BOT_USERNAME is missing", () => {
+    process.env.BACKEND_API_BASE_URL = "http://localhost:3000";
+    delete process.env.BOT_USERNAME;
+    expect(() => loadEnvConfig()).toThrow("BOT_USERNAME");
+  });
+
+  it("reads BOT_USERNAME", () => {
+    process.env.BACKEND_API_BASE_URL = "http://localhost:3000";
+    process.env.BOT_USERNAME = "taklifnoma_bot";
+
+    expect(loadEnvConfig().botUsername).toBe("taklifnoma_bot");
   });
 });
