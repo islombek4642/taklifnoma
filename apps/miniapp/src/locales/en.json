@@ -30,7 +30,8 @@
       "venueAddress": "Address",
       "mapUrl": "Map link (optional)",
       "greetingText": "Greeting text (optional)",
-      "musicTrack": "Choose music"
+      "musicTrack": "Choose music",
+      "musicSkip": "Continue without music"
     },
     "next": "Next",
     "back": "Back",

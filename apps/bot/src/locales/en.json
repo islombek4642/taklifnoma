@@ -9,5 +9,20 @@
   "commands": {
     "start": "Launch the bot",
     "help": "Get help"
+  },
+  "admin": {
+    "panelIntro": "As an admin, you can open the control panel using the button below.",
+    "panelButton": "🛠 Admin panel",
+    "menuTitle": "Admin panel — what would you like to do?",
+    "addMusicButton": "🎵 Add music",
+    "cancelButton": "Cancel",
+    "cancelled": "Cancelled.",
+    "askTitle": "Type a name for the new track.",
+    "titleRequired": "Please enter a name for the track.",
+    "askFile": "Send the audio file for \"{{title}}\".",
+    "unsupportedFile": "That file type isn't supported. Please send an audio file (mp3, wav, ogg, m4a, or aac).",
+    "uploading": "Uploading...",
+    "uploadSuccess": "\"{{title}}\" was added successfully and can now be chosen when creating an invitation.",
+    "uploadError": "Something went wrong. Please try again."
   }
 }

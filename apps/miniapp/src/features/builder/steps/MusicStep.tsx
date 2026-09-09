@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { VolumeX, Check } from "lucide-react";
 import { apiClient, type MusicTrackDto } from "../../../services/api-client.js";
 import { API_BASE_URL } from "../../../constants/config.js";
 import { MusicTrackCard } from "./MusicTrackCard.js";
@@ -39,6 +40,24 @@ export function MusicStep({ form, onChange }: Props) {
     <div>
       <p className="music-step__hint">{t("builder.fields.musicTrack")}</p>
       <div role="radiogroup" aria-label={t("builder.fields.musicTrack")}>
+        <div
+          className={form.musicTrackId === "" ? "music-track music-track--selected" : "music-track"}
+          role="radio"
+          aria-checked={form.musicTrackId === ""}
+          tabIndex={0}
+          onClick={() => onChange("musicTrackId", "")}
+          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onChange("musicTrackId", "")}
+        >
+          <div className="music-track__play music-track__play--skip">
+            <VolumeX size={16} strokeWidth={1.8} />
+          </div>
+          <div className="music-track__info">
+            <div className="music-track__title">{t("builder.fields.musicSkip")}</div>
+          </div>
+          <div className="music-track__check">
+            {form.musicTrackId === "" ? <Check size={13} strokeWidth={2.4} /> : null}
+          </div>
+        </div>
         {state.tracks.map((track) => (
           <MusicTrackCard
             key={track.id}

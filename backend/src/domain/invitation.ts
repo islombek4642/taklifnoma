@@ -21,13 +21,16 @@ export interface Invitation extends InvitationInput {
   updatedAt: Date;
 }
 
+// musicTrackId is deliberately not required — the guest picking a wedding
+// invitation may not want background music at all, so an empty string
+// here just means "no track selected" (the public site already renders
+// fine with no music section in that case).
 const REQUIRED_STRING_FIELDS: Array<keyof InvitationInput> = [
   "groomName",
   "brideName",
   "venueName",
   "venueAddress",
   "templateId",
-  "musicTrackId",
 ];
 
 export function validateInvitationInput(input: InvitationInput): void {

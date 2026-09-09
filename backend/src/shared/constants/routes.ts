@@ -6,6 +6,7 @@ export const API_ROUTES = {
   PUBLIC_RSVP: "/api/public/invitations/:slug/rsvp",
   TEMPLATES: "/api/templates",
   MUSIC_TRACKS: "/api/music-tracks",
+  ADMIN_MUSIC_TRACKS: "/api/admin/music-tracks",
 } as const;
 
 export const MEDIA_ROUTES = {

@@ -4,3 +4,13 @@
   margin-bottom: var(--space-5);
   line-height: 1.5;
 }
+
+.music-track__play--skip {
+  background: var(--color-surface-muted, var(--color-border));
+  color: var(--color-text-muted);
+}
+
+.music-track--selected .music-track__play--skip {
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+}

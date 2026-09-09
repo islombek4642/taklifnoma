@@ -6,7 +6,13 @@ import { registerCommandMenu } from "./commands/command-menu.js";
 const config = loadEnvConfig();
 const i18n = createI18n();
 const t = i18n.t.bind(i18n);
-const bot = createBot(config.botToken, config.miniAppUrl, t);
+const bot = createBot({
+  botToken: config.botToken,
+  miniAppUrl: config.miniAppUrl,
+  backendApiBaseUrl: config.backendApiBaseUrl,
+  adminTelegramIds: config.adminTelegramIds,
+  t,
+});
 
 await registerCommandMenu(bot, t);
 

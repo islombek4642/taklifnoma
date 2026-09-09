@@ -23,8 +23,8 @@ describe("isStepValid", () => {
     expect(isStepValid(3, INITIAL_BUILDER_FORM_STATE)).toBe(true);
   });
 
-  it("requires a music track on step 4 (the last step — the template is chosen before entering the builder)", () => {
-    expect(isStepValid(4, INITIAL_BUILDER_FORM_STATE)).toBe(false);
+  it("treats the music step as always valid — the user may skip music entirely", () => {
+    expect(isStepValid(4, INITIAL_BUILDER_FORM_STATE)).toBe(true);
     expect(isStepValid(4, { ...INITIAL_BUILDER_FORM_STATE, musicTrackId: "romantic-piano" })).toBe(true);
   });
 });

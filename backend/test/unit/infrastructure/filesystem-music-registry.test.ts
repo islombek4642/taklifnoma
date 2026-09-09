@@ -45,4 +45,38 @@ describe("FilesystemMusicRegistry", () => {
     expect(await registry.exists("romantic-piano")).toBe(true);
     expect(await registry.exists("unknown")).toBe(false);
   });
+
+  describe("create", () => {
+    it("writes a manifest and the audio file, and returns a track visible to list()", async () => {
+      const registry = new FilesystemMusicRegistry(contentDir);
+
+      const track = await registry.create({ title: "Yangi kuy", fileBuffer: Buffer.from("fake-audio-bytes"), fileExtension: "mp3" });
+
+      expect(track.title).toBe("Yangi kuy");
+      expect(track.fileUrl).toBe(`/media/music/${track.id}/track.mp3`);
+      expect(await registry.list()).toContainEqual(track);
+    });
+
+    it("generates a unique id for two tracks with the same title", async () => {
+      const registry = new FilesystemMusicRegistry(contentDir);
+
+      const first = await registry.create({ title: "Kuy", fileBuffer: Buffer.from("a"), fileExtension: "mp3" });
+      const second = await registry.create({ title: "Kuy", fileBuffer: Buffer.from("b"), fileExtension: "mp3" });
+
+      expect(first.id).not.toBe(second.id);
+      expect(await registry.list()).toHaveLength(2);
+    });
+
+    it("persists the actual audio bytes to disk", async () => {
+      const registry = new FilesystemMusicRegistry(contentDir);
+      const bytes = Buffer.from("fake-audio-bytes");
+
+      const track = await registry.create({ title: "Kuy", fileBuffer: bytes, fileExtension: "wav" });
+
+      const written = await import("node:fs/promises").then((fs) =>
+        fs.readFile(path.join(contentDir, "music", track.id, "track.wav")),
+      );
+      expect(written.equals(bytes)).toBe(true);
+    });
+  });
 });

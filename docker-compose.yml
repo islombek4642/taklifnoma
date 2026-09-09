@@ -29,9 +29,14 @@ services:
     build: ./apps/bot
     container_name: taklifnoma_bot
     restart: on-failure:5
+    depends_on:
+      backend:
+        condition: service_healthy
     environment:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - MINIAPP_URL=https://${MINIAPP_DOMAIN}
+      - BACKEND_API_BASE_URL=http://backend:3000
+      - ADMIN_TELEGRAM_IDS=${ADMIN_TELEGRAM_IDS}
     networks:
       - backend_net
 
