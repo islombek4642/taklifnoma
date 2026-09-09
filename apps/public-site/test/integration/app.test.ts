@@ -77,6 +77,32 @@ describe("GET /:slug", () => {
   });
 });
 
+describe("GET /preview/:templateId", () => {
+  it("renders a sample invitation styled with the requested template, in preview mode", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    const app = buildApp({ backendApiClient });
+
+    const response = await app.inject({ method: "GET", url: "/preview/classic" });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toContain("text/html");
+    expect(response.headers["cache-control"]).toBe("no-store");
+    expect(response.body).toContain("body { font-family: serif; }");
+    expect(response.body).toContain("taklifnoma-preview-badge");
+    expect(response.body).toContain("var previewMode = true;");
+  });
+
+  it("returns 404 for a template that isn't registered", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    const app = buildApp({ backendApiClient });
+
+    const response = await app.inject({ method: "GET", url: "/preview/unknown-template" });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toContain("Taklifnoma topilmadi");
+  });
+});
+
 describe("POST /:slug/rsvp", () => {
   it("proxies a successful RSVP submission to the backend", async () => {
     const backendApiClient = new FakeBackendApiClient();

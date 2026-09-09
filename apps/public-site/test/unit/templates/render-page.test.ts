@@ -43,6 +43,20 @@ describe("renderInvitationPage", () => {
     expect(html).toContain("data-rsvp-modal-overlay");
   });
 
+  it("omits the preview badge and preview mode by default", () => {
+    const html = renderInvitationPage(invitation, t, "body { color: blue; }", undefined);
+
+    expect(html).not.toContain("taklifnoma-preview-badge");
+    expect(html).toContain("var previewMode = false;");
+  });
+
+  it("shows a preview badge and enables preview mode when requested", () => {
+    const html = renderInvitationPage(invitation, t, "body { color: blue; }", undefined, { previewMode: true });
+
+    expect(html).toContain("taklifnoma-preview-badge");
+    expect(html).toContain("var previewMode = true;");
+  });
+
   it("omits the music section when no track file url is given", () => {
     const html = renderInvitationPage(invitation, t, "", undefined);
 

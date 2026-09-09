@@ -9,11 +9,27 @@ export interface RsvpLabels {
   modalNotComingTitle: string;
 }
 
-export function renderClientScript(slug: string, eventDateTimeIso: string, labels: RsvpLabels): string {
+export interface RenderClientScriptOptions {
+  // The template-preview page ("Ko'rish" from the home screen's template
+  // gallery) renders this exact script so the RSVP modal looks and feels
+  // real, but there's no actual invitation behind it — so a submit there
+  // must never hit the network or touch localStorage, just show the
+  // thank-you state locally.
+  previewMode?: boolean;
+}
+
+export function renderClientScript(
+  slug: string,
+  eventDateTimeIso: string,
+  labels: RsvpLabels,
+  options?: RenderClientScriptOptions,
+): string {
   const statusStorageKey = `taklifnoma_rsvp_status_${slug}`;
+  const previewMode = options?.previewMode === true;
 
   return `
 (function () {
+  var previewMode = ${JSON.stringify(previewMode)};
   var eventDate = new Date(${JSON.stringify(eventDateTimeIso)});
   function pad(n) { return String(n).padStart(2, "0"); }
   function tick() {
@@ -110,8 +126,10 @@ export function renderClientScript(slug: string, eventDateTimeIso: string, label
     show(changeBtn);
   }
 
-  var savedStatus = getSavedStatus();
-  if (savedStatus) showRespondedState(savedStatus, false);
+  if (!previewMode) {
+    var savedStatus = getSavedStatus();
+    if (savedStatus) showRespondedState(savedStatus, false);
+  }
 
   function openModal(status) {
     if (!modalOverlay || !modal) return;
@@ -163,6 +181,12 @@ export function renderClientScript(slug: string, eventDateTimeIso: string, label
       if (!guestName) {
         if (modalError) modalError.textContent = ${JSON.stringify(labels.nameRequired)};
         show(modalError);
+        return;
+      }
+
+      if (previewMode) {
+        closeModal();
+        showRespondedState(status, true);
         return;
       }
 

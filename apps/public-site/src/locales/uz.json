@@ -22,5 +22,12 @@
     "modalClose": "Yopish"
   },
   "music": { "toggleLabel": "Musiqa" },
-  "notFound": { "title": "Taklifnoma topilmadi", "subtitle": "Havola noto'g'ri yoki taklifnoma o'chirilgan bo'lishi mumkin." }
+  "notFound": { "title": "Taklifnoma topilmadi", "subtitle": "Havola noto'g'ri yoki taklifnoma o'chirilgan bo'lishi mumkin." },
+  "preview": {
+    "badge": "Namuna ko'rinishi — bu shablon dizaynining namunasi",
+    "groomName": "Aziz",
+    "brideName": "Malika",
+    "venueName": "Bahor to'yxonasi",
+    "venueAddress": "Toshkent shahri"
+  }
 }

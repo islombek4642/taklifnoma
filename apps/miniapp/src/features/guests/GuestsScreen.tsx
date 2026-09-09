@@ -50,7 +50,7 @@ export function GuestsScreen() {
         title={t("guests.noInvitation")}
         subtitle={t("home.emptySubtitle")}
         action={
-          <Button fullWidth onClick={() => navigate("/builder")}>
+          <Button fullWidth onClick={() => navigate("/")}>
             {t("home.createButton")}
           </Button>
         }

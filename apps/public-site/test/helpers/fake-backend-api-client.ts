@@ -8,7 +8,13 @@ import type {
 import { RsvpSubmissionError } from "../../src/services/backend-api-client.js";
 
 const DEFAULT_TEMPLATES: TemplateDto[] = [
-  { id: "classic", name: "Klassik", accentColor: "#b45d52", styleCss: "body { font-family: serif; }" },
+  {
+    id: "classic",
+    name: "Klassik",
+    description: "Iliq va vaqti-hech qachon eskirmaydigan uslub",
+    accentColor: "#b45d52",
+    styleCss: "body { font-family: serif; }",
+  },
 ];
 
 const DEFAULT_MUSIC_TRACKS: MusicTrackDto[] = [

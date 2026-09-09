@@ -10,7 +10,7 @@ import {
   type BuilderFormState,
 } from "./builder-form.js";
 
-export function useBuilderForm() {
+export function useBuilderForm(initialTemplateId?: string) {
   const [mode, setMode] = useState<"loading" | "create" | "edit">("loading");
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<BuilderFormState>(INITIAL_BUILDER_FORM_STATE);
@@ -23,6 +23,10 @@ export function useBuilderForm() {
         setForm(fromInvitation(invitation));
         setMode("edit");
       } else {
+        // A template must already be picked (on the Home screen's gallery)
+        // before the builder can be entered in create mode — there's no
+        // step here to choose one anymore.
+        setForm((prev) => ({ ...prev, templateId: initialTemplateId ?? "" }));
         setMode("create");
       }
     });

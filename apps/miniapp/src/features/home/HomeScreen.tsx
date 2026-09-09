@@ -8,7 +8,7 @@ import { formatEventDateUz } from "../../utils/format-date.js";
 import { PUBLIC_SITE_BASE_URL } from "../../constants/config.js";
 import { Button } from "../../components/Button.js";
 import { Card } from "../../components/Card.js";
-import { EmptyState } from "../../components/EmptyState.js";
+import { TemplateGallery } from "./TemplateGallery.js";
 import "./HomeScreen.css";
 
 type LoadState =
@@ -48,16 +48,14 @@ export function HomeScreen() {
 
   if (state.status === "empty") {
     return (
-      <EmptyState
-        icon={<Heart size={56} strokeWidth={1.4} />}
-        title={t("home.emptyTitle")}
-        subtitle={t("home.emptySubtitle")}
-        action={
-          <Button fullWidth onClick={() => navigate("/builder")}>
-            {t("home.createButton")}
-          </Button>
-        }
-      />
+      <div className="home-templates">
+        <div className="home-templates__intro">
+          <Heart size={40} strokeWidth={1.4} className="home-templates__icon" />
+          <h1 className="home-templates__title">{t("home.emptyTitle")}</h1>
+          <p className="home-templates__subtitle">{t("home.templatesSubtitle")}</p>
+        </div>
+        <TemplateGallery onSelect={(templateId) => navigate("/builder", { state: { templateId } })} />
+      </div>
     );
   }
 

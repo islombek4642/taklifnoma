@@ -40,6 +40,7 @@ export interface InvitationInputDto {
 export interface TemplateDto {
   id: string;
   name: string;
+  description: string;
   accentColor: string;
 }
 

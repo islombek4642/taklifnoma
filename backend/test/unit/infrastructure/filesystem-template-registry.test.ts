@@ -29,13 +29,17 @@ describe("FilesystemTemplateRegistry", () => {
   });
 
   it("lists templates that have both a manifest and a stylesheet", async () => {
-    await writeTemplate("classic", { name: "Klassik", accentColor: "#b45d52" }, "body { color: blue; }");
+    await writeTemplate(
+      "classic",
+      { name: "Klassik", description: "Iliq uslub", accentColor: "#b45d52" },
+      "body { color: blue; }",
+    );
     const registry = new FilesystemTemplateRegistry(contentDir);
 
     const templates = await registry.list();
 
     expect(templates).toEqual([
-      { id: "classic", name: "Klassik", accentColor: "#b45d52", styleCss: "body { color: blue; }" },
+      { id: "classic", name: "Klassik", description: "Iliq uslub", accentColor: "#b45d52", styleCss: "body { color: blue; }" },
     ]);
   });
 
@@ -47,7 +51,7 @@ describe("FilesystemTemplateRegistry", () => {
   });
 
   it("exists() reports whether a template id is present", async () => {
-    await writeTemplate("classic", { name: "Klassik", accentColor: "#b45d52" });
+    await writeTemplate("classic", { name: "Klassik", description: "Iliq uslub", accentColor: "#b45d52" });
     const registry = new FilesystemTemplateRegistry(contentDir);
 
     expect(await registry.exists("classic")).toBe(true);

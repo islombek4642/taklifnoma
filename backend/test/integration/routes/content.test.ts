@@ -25,7 +25,15 @@ describe("GET /api/templates", () => {
     const response = await app.inject({ method: "GET", url: "/api/templates" });
 
     expect(response.statusCode).toBe(200);
-    expect(response.json()).toEqual([{ id: "classic", name: "Klassik", accentColor: "#b45d52", styleCss: "body { font-family: serif; }" }]);
+    expect(response.json()).toEqual([
+      {
+        id: "classic",
+        name: "Klassik",
+        description: "Iliq va vaqti-hech qachon eskirmaydigan uslub",
+        accentColor: "#b45d52",
+        styleCss: "body { font-family: serif; }",
+      },
+    ]);
   });
 });
 

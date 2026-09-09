@@ -4,6 +4,9 @@
     "loading": "Yuklanmoqda...",
     "emptyTitle": "Hali taklifnomangiz yo'q",
     "emptySubtitle": "Bir necha daqiqada o'z to'y taklifnomangizni yarating",
+    "templatesSubtitle": "Boshlash uchun quyidagi shablonlardan birini tanlang",
+    "templateViewButton": "Ko'rish",
+    "templateSelectButton": "Tanlash",
     "createButton": "Taklifnoma yaratish",
     "editButton": "Tahrirlash",
     "viewButton": "Ko'rish",
@@ -16,8 +19,7 @@
       "dateTime": "Sana va vaqt",
       "venue": "To'y zali",
       "greeting": "Tabrik matni",
-      "music": "Fon musiqasi",
-      "template": "Shablon"
+      "music": "Fon musiqasi"
     },
     "fields": {
       "groomName": "Kuyov ismi",
@@ -28,8 +30,7 @@
       "venueAddress": "Manzil",
       "mapUrl": "Xarita havolasi (ixtiyoriy)",
       "greetingText": "Tabrik matni (ixtiyoriy)",
-      "musicTrack": "Musiqa tanlang",
-      "template": "Taklifnoma dizaynini tanlang"
+      "musicTrack": "Musiqa tanlang"
     },
     "next": "Keyingi",
     "back": "Orqaga",
