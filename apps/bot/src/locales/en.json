@@ -1,1 +1,13 @@
-{}
+{
+  "start": {
+    "welcome": "Hello! Welcome to the Taklifnoma bot. Create your own wedding invitation using the button below.",
+    "openApp": "Create invitation"
+  },
+  "help": {
+    "text": "Taklifnoma bot help:\n\n/start — launch the bot and open the Mini App\n/help — this help message\n\nTo create your wedding invitation, tap \"Create invitation\" inside the Mini App and fill in the details step by step. For questions or feedback, contact @taklifnoma_support."
+  },
+  "commands": {
+    "start": "Launch the bot",
+    "help": "Get help"
+  }
+}

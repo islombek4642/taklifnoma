@@ -11,7 +11,15 @@
     "thankYouComing": "Rahmat! Sizni kutamiz.",
     "thankYouNotComing": "Rahmat, javobingiz uchun.",
     "errorGeneric": "Xatolik yuz berdi. Qaytadan urinib ko'ring.",
-    "errorNameRequired": "Iltimos, ismingizni kiriting."
+    "errorNameRequired": "Iltimos, ismingizni kiriting.",
+    "alreadyRespondedComing": "Siz allaqachon \"Kelaman\" deb javob bergansiz.",
+    "alreadyRespondedNotComing": "Siz allaqachon \"Kelolmayman\" deb javob bergansiz.",
+    "changeResponse": "Javobni o'zgartirish",
+    "modalComingTitle": "Kelishingizni tasdiqlaysizmi?",
+    "modalNotComingTitle": "Kelolmasligingizni tasdiqlaysizmi?",
+    "confirmButton": "Tasdiqlash",
+    "cancelButton": "Bekor qilish",
+    "modalClose": "Yopish"
   },
   "music": { "toggleLabel": "Musiqa" },
   "notFound": { "title": "Taklifnoma topilmadi", "subtitle": "Havola noto'g'ri yoki taklifnoma o'chirilgan bo'lishi mumkin." }

@@ -3,9 +3,15 @@ export interface RsvpLabels {
   notComingThankYou: string;
   error: string;
   nameRequired: string;
+  alreadyRespondedComing: string;
+  alreadyRespondedNotComing: string;
+  modalComingTitle: string;
+  modalNotComingTitle: string;
 }
 
 export function renderClientScript(slug: string, eventDateTimeIso: string, labels: RsvpLabels): string {
+  const statusStorageKey = `taklifnoma_rsvp_status_${slug}`;
+
   return `
 (function () {
   var eventDate = new Date(${JSON.stringify(eventDateTimeIso)});
@@ -41,29 +47,129 @@ export function renderClientScript(slug: string, eventDateTimeIso: string, label
     }
   }
 
-  var form = document.querySelector("[data-rsvp-form]");
+  // Remembers this guest's answer for THIS invitation specifically (unlike
+  // the guest token above, which is shared across every invitation opened
+  // from this browser), so reopening the link later shows "you already
+  // responded" instead of silently re-showing a blank form.
+  var statusKey = ${JSON.stringify(statusStorageKey)};
+  function getSavedStatus() {
+    try { return window.localStorage.getItem(statusKey); } catch (e) { return null; }
+  }
+  function saveStatus(status) {
+    try { window.localStorage.setItem(statusKey, status); } catch (e) {}
+  }
+
+  var buttonsWrap = document.querySelector("[data-rsvp-buttons]");
   var messageEl = document.querySelector("[data-rsvp-message]");
+  var changeBtn = document.querySelector("[data-rsvp-change]");
+  var modalOverlay = document.querySelector("[data-rsvp-modal-overlay]");
+  var modal = document.querySelector("[data-rsvp-modal]");
+  var modalTitle = document.querySelector("[data-rsvp-modal-title]");
+  var modalError = document.querySelector("[data-rsvp-modal-error]");
+  var modalClose = document.querySelector("[data-rsvp-modal-close]");
+  var modalCancel = document.querySelector("[data-rsvp-modal-cancel]");
+  var form = document.querySelector("[data-rsvp-form]");
+  var nameInput = document.querySelector("[data-rsvp-name-input]");
+
+  var modalTitles = {
+    COMING: ${JSON.stringify(labels.modalComingTitle)},
+    NOT_COMING: ${JSON.stringify(labels.modalNotComingTitle)}
+  };
+  var thankYouLabels = {
+    COMING: ${JSON.stringify(labels.comingThankYou)},
+    NOT_COMING: ${JSON.stringify(labels.notComingThankYou)}
+  };
+  var alreadyRespondedLabels = {
+    COMING: ${JSON.stringify(labels.alreadyRespondedComing)},
+    NOT_COMING: ${JSON.stringify(labels.alreadyRespondedNotComing)}
+  };
+
+  // A template's own stylesheet can give ".rsvp__buttons" (or any other
+  // class we share with it) an explicit "display", which then outranks the
+  // browser's default [hidden] rule at equal specificity. Setting the
+  // inline style directly always wins, so hide()/show() are used for every
+  // element toggled here instead of the "hidden" property alone — that
+  // stays too, only for its semantic/accessibility meaning.
+  function hide(el) {
+    if (!el) return;
+    el.hidden = true;
+    el.style.display = "none";
+  }
+  function show(el) {
+    if (!el) return;
+    el.hidden = false;
+    el.style.display = "";
+  }
+
+  function showRespondedState(status, freshlySubmitted) {
+    hide(buttonsWrap);
+    if (messageEl) {
+      messageEl.textContent = freshlySubmitted ? thankYouLabels[status] : alreadyRespondedLabels[status];
+      show(messageEl);
+    }
+    show(changeBtn);
+  }
+
+  var savedStatus = getSavedStatus();
+  if (savedStatus) showRespondedState(savedStatus, false);
+
+  function openModal(status) {
+    if (!modalOverlay || !modal) return;
+    modal.setAttribute("data-selected-status", status);
+    if (modalTitle) modalTitle.textContent = modalTitles[status] || "";
+    hide(modalError);
+    if (nameInput) nameInput.value = "";
+    show(modalOverlay);
+    if (nameInput) nameInput.focus();
+  }
+  function closeModal() {
+    hide(modalOverlay);
+  }
+
+  if (buttonsWrap) {
+    var triggers = buttonsWrap.querySelectorAll("[data-status]");
+    for (var i = 0; i < triggers.length; i++) {
+      triggers[i].addEventListener("click", function (event) {
+        openModal(event.currentTarget.getAttribute("data-status"));
+      });
+    }
+  }
+  if (changeBtn) {
+    changeBtn.addEventListener("click", function () {
+      hide(changeBtn);
+      hide(messageEl);
+      show(buttonsWrap);
+    });
+  }
+  if (modalClose) modalClose.addEventListener("click", closeModal);
+  if (modalCancel) modalCancel.addEventListener("click", closeModal);
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", function (event) {
+      if (event.target === modalOverlay) closeModal();
+    });
+  }
+
   if (form) {
-    var buttons = form.querySelectorAll("[data-status]");
-    var setButtonsDisabled = function (disabled) {
-      for (var i = 0; i < buttons.length; i++) buttons[i].disabled = disabled;
+    var confirmBtn = form.querySelector("[data-rsvp-confirm]");
+    var setFormDisabled = function (disabled) {
+      if (confirmBtn) confirmBtn.disabled = disabled;
+      if (nameInput) nameInput.disabled = disabled;
     };
 
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      var submitter = event.submitter;
-      var status = submitter ? submitter.getAttribute("data-status") : null;
-      var nameInput = form.querySelector('[name="guestName"]');
+      var status = modal ? modal.getAttribute("data-selected-status") : null;
       var guestName = nameInput ? nameInput.value.trim() : "";
       if (!guestName) {
-        if (messageEl) { messageEl.hidden = false; messageEl.textContent = ${JSON.stringify(labels.nameRequired)}; }
+        if (modalError) modalError.textContent = ${JSON.stringify(labels.nameRequired)};
+        show(modalError);
         return;
       }
 
       // Disabled immediately (not just after the request resolves) so a
       // second click while the first request is still in flight can't
       // fire a second, conflicting submission.
-      setButtonsDisabled(true);
+      setFormDisabled(true);
 
       fetch(${JSON.stringify(`/${slug}/rsvp`)}, {
         method: "POST",
@@ -75,15 +181,15 @@ export function renderClientScript(slug: string, eventDateTimeIso: string, label
           return res.json();
         })
         .then(function (result) {
-          form.hidden = true;
-          if (messageEl) {
-            messageEl.hidden = false;
-            messageEl.textContent = result.status === "COMING" ? ${JSON.stringify(labels.comingThankYou)} : ${JSON.stringify(labels.notComingThankYou)};
-          }
+          setFormDisabled(false);
+          closeModal();
+          saveStatus(result.status);
+          showRespondedState(result.status, true);
         })
         .catch(function () {
-          setButtonsDisabled(false);
-          if (messageEl) { messageEl.hidden = false; messageEl.textContent = ${JSON.stringify(labels.error)}; }
+          setFormDisabled(false);
+          if (modalError) modalError.textContent = ${JSON.stringify(labels.error)};
+          show(modalError);
         });
     });
   }

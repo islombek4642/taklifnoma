@@ -1,1 +1,26 @@
-{}
+{
+  "meta": { "titleSuffix": "wedding invitation" },
+  "hero": { "defaultGreeting": "You're invited to our wedding!" },
+  "countdown": { "days": "days", "hours": "hrs", "minutes": "min", "seconds": "sec" },
+  "venue": { "title": "Venue", "mapButton": "View on map" },
+  "rsvp": {
+    "title": "Confirm your attendance",
+    "namePlaceholder": "Your name",
+    "comingButton": "I'll be there",
+    "notComingButton": "Can't make it",
+    "thankYouComing": "Thank you! We look forward to seeing you.",
+    "thankYouNotComing": "Thank you for your response.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorNameRequired": "Please enter your name.",
+    "alreadyRespondedComing": "You've already responded \"I'll be there\".",
+    "alreadyRespondedNotComing": "You've already responded \"Can't make it\".",
+    "changeResponse": "Change response",
+    "modalComingTitle": "Confirm that you're coming?",
+    "modalNotComingTitle": "Confirm that you can't make it?",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel",
+    "modalClose": "Close"
+  },
+  "music": { "toggleLabel": "Music" },
+  "notFound": { "title": "Invitation not found", "subtitle": "The link may be incorrect, or the invitation may have been removed." }
+}

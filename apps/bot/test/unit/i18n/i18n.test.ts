@@ -9,10 +9,18 @@ describe("createI18n", () => {
     expect(i18n.t("start.openApp")).toBe("Taklifnoma yaratish");
   });
 
-  it("falls back to uz for languages with an empty resource file", () => {
+  it("resolves ru and en start messages instead of falling back to uz", () => {
     const i18n = createI18n();
 
-    expect(i18n.t("start.welcome", { lng: "ru" })).toBe(i18n.t("start.welcome", { lng: "uz" }));
-    expect(i18n.t("start.welcome", { lng: "en" })).toBe(i18n.t("start.welcome", { lng: "uz" }));
+    expect(i18n.t("start.welcome", { lng: "ru" })).toContain("Здравствуйте");
+    expect(i18n.t("start.welcome", { lng: "en" })).toContain("Hello");
+    expect(i18n.t("start.welcome", { lng: "ru" })).not.toBe(i18n.t("start.welcome", { lng: "uz" }));
+    expect(i18n.t("start.welcome", { lng: "en" })).not.toBe(i18n.t("start.welcome", { lng: "uz" }));
+  });
+
+  it("still falls back to uz for a language with no resource file at all", () => {
+    const i18n = createI18n();
+
+    expect(i18n.t("start.welcome", { lng: "fr" })).toBe(i18n.t("start.welcome", { lng: "uz" }));
   });
 });

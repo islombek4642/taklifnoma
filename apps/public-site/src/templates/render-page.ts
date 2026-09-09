@@ -7,6 +7,7 @@ import { renderCountdownSection } from "./sections/countdown.js";
 import { renderVenueSection } from "./sections/venue.js";
 import { renderRsvpSection } from "./sections/rsvp.js";
 import { renderMusicSection } from "./sections/music.js";
+import { MODAL_STYLE } from "../constants/modal-style.js";
 
 export function renderInvitationPage(
   invitation: PublicInvitationDto,
@@ -20,6 +21,10 @@ export function renderInvitationPage(
     notComingThankYou: t("rsvp.thankYouNotComing"),
     error: t("rsvp.errorGeneric"),
     nameRequired: t("rsvp.errorNameRequired"),
+    alreadyRespondedComing: t("rsvp.alreadyRespondedComing"),
+    alreadyRespondedNotComing: t("rsvp.alreadyRespondedNotComing"),
+    modalComingTitle: t("rsvp.modalComingTitle"),
+    modalNotComingTitle: t("rsvp.modalNotComingTitle"),
   });
 
   return `<!doctype html>
@@ -29,6 +34,7 @@ export function renderInvitationPage(
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>${escapeHtml(title)}</title>
 <style>${styleCss}</style>
+<style>${MODAL_STYLE}</style>
 </head>
 <body>
 ${renderHeroSection(invitation, t)}
