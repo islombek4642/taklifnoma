@@ -96,6 +96,23 @@ describe("POST /:slug/rsvp", () => {
     ]);
   });
 
+  it("forwards the guestToken to the backend when the client sends one", async () => {
+    const backendApiClient = new FakeBackendApiClient();
+    backendApiClient.seedInvitation(invitation);
+    const app = buildApp({ backendApiClient });
+
+    await app.inject({
+      method: "POST",
+      url: "/ulugbek-malika/rsvp",
+      headers: { "content-type": "application/json" },
+      payload: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" },
+    });
+
+    expect(backendApiClient.submittedRsvps).toEqual([
+      { slug: "ulugbek-malika", input: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" } },
+    ]);
+  });
+
   it("relays the backend's error status and body on failure", async () => {
     const backendApiClient = new FakeBackendApiClient();
     backendApiClient.rsvpFailure = { status: 429, body: { error: "Too many requests" } };

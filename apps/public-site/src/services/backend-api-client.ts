@@ -15,6 +15,7 @@ export interface PublicInvitationDto {
 export interface RsvpInputDto {
   guestName: string;
   status: string;
+  guestToken?: string;
 }
 
 export interface TemplateDto {

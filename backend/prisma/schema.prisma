@@ -33,7 +33,9 @@ model RsvpResponse {
   invitation    Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
   guestName     String
   status        String
+  guestToken    String?
   respondedAt   DateTime   @default(now())
 
   @@index([invitationId])
+  @@unique([invitationId, guestToken])
 }

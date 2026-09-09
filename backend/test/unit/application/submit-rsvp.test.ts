@@ -59,4 +59,57 @@ describe("SubmitRsvpUseCase", () => {
 
     expect(notifier.notifications).toHaveLength(0);
   });
+
+  it("resubmitting the same guestToken with the same status updates in place and does not re-notify", async () => {
+    const { invitations, rsvps, notifier, useCase } = buildUseCase();
+    await invitations.create(baseInvitation);
+
+    const first = await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" },
+    });
+    const second = await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" },
+    });
+
+    expect(second.id).toBe(first.id);
+    expect(await rsvps.listByInvitationId(first.invitationId)).toHaveLength(1);
+    expect(notifier.notifications).toHaveLength(1);
+  });
+
+  it("resubmitting the same guestToken with a different status updates the row and notifies again", async () => {
+    const { invitations, rsvps, notifier, useCase } = buildUseCase();
+    await invitations.create(baseInvitation);
+
+    const first = await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" },
+    });
+    const second = await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Aziza", status: "NOT_COMING", guestToken: "guest-1" },
+    });
+
+    expect(second.id).toBe(first.id);
+    expect(second.status).toBe("NOT_COMING");
+    expect(await rsvps.listByInvitationId(first.invitationId)).toHaveLength(1);
+    expect(notifier.notifications).toHaveLength(2);
+  });
+
+  it("different guestTokens each create their own response", async () => {
+    const { invitations, rsvps, useCase } = buildUseCase();
+    await invitations.create(baseInvitation);
+
+    const first = await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Aziza", status: "COMING", guestToken: "guest-1" },
+    });
+    await useCase.execute({
+      slug: "ulugbek-malika",
+      input: { guestName: "Bek", status: "COMING", guestToken: "guest-2" },
+    });
+
+    expect(await rsvps.listByInvitationId(first.invitationId)).toHaveLength(2);
+  });
 });
