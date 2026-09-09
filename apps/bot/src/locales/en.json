@@ -11,6 +11,7 @@
     "help": "Get help"
   },
   "admin": {
+    "panelEnabled": "Admin panel enabled.",
     "panelButton": "🛠 Admin panel",
     "menuTitle": "Admin panel — what would you like to do?",
     "addMusicButton": "🎵 Add music",

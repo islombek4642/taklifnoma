@@ -9,7 +9,6 @@ export interface RegisterAdminPanelOptions {
   adminTelegramIds: number[];
   backendApiBaseUrl: string;
   botToken: string;
-  miniAppUrl: string;
   t: TFunction;
 }
 
@@ -17,11 +16,14 @@ export function isAdmin(adminTelegramIds: number[], userId: number | undefined):
   return userId !== undefined && adminTelegramIds.includes(userId);
 }
 
-// The admin's /start reply fully replaces the normal one (rather than
-// adding a second message) — it carries the same "open app" action as a
-// reply-keyboard web_app button, alongside the admin panel entry point.
-export function buildAdminStartKeyboard(t: TFunction, miniAppUrl: string): Keyboard {
-  return new Keyboard().webApp(t("start.openApp"), miniAppUrl).row().text(t("admin.panelButton")).resized();
+// Telegram only signs a Mini App's initData reliably when it's opened
+// through an inline "web_app" button — a reply-keyboard web_app button can
+// open the app without valid initData, which the backend then rejects
+// (401) on every request. So the "open app" action stays on the normal
+// inline-button /start reply (registerStartCommand, unchanged for admins),
+// and this reply-keyboard only ever carries plain navigation.
+export function buildAdminOnlyKeyboard(t: TFunction): Keyboard {
+  return new Keyboard().text(t("admin.panelButton")).resized();
 }
 
 export function buildAdminMenuKeyboard(t: TFunction): Keyboard {
@@ -56,21 +58,21 @@ export function resolveAudioExtension(media: AudioLikeMedia): (typeof ALLOWED_AU
 }
 
 export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions): void {
-  const { adminTelegramIds, backendApiBaseUrl, botToken, miniAppUrl, t } = options;
+  const { adminTelegramIds, backendApiBaseUrl, botToken, t } = options;
   if (adminTelegramIds.length === 0) return;
 
   const adminClient: BackendAdminClient = createBackendAdminClient(backendApiBaseUrl, botToken);
   const sessions = new Map<number, AdminSession>();
 
-  // Fully replaces the normal /start reply for admins (does not call
-  // next()) so they get one message carrying both the "open app" action
-  // and the admin panel entry point, both as reply-keyboard buttons.
+  // Adds the admin panel's reply-keyboard entry point alongside (not
+  // instead of) the normal /start reply — next() always runs so the "open
+  // app" inline button (registerStartCommand) still goes out for admins
+  // exactly as it does for everyone else.
   bot.command("start", async (ctx, next) => {
-    if (!isAdmin(adminTelegramIds, ctx.from?.id)) {
-      await next();
-      return;
+    if (isAdmin(adminTelegramIds, ctx.from?.id)) {
+      await ctx.reply(t("admin.panelEnabled"), { reply_markup: buildAdminOnlyKeyboard(t) });
     }
-    await ctx.reply(t("start.welcome"), { reply_markup: buildAdminStartKeyboard(t, miniAppUrl) });
+    await next();
   });
 
   bot.hears(t("admin.panelButton"), async (ctx, next) => {
@@ -87,7 +89,7 @@ export function registerAdminPanel(bot: Bot, options: RegisterAdminPanelOptions)
       return;
     }
     sessions.delete(ctx.from.id);
-    await ctx.reply(t("start.welcome"), { reply_markup: buildAdminStartKeyboard(t, miniAppUrl) });
+    await ctx.reply(t("admin.panelEnabled"), { reply_markup: buildAdminOnlyKeyboard(t) });
   });
 
   bot.hears(t("admin.addMusicButton"), async (ctx, next) => {

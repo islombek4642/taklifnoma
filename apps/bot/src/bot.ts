@@ -15,10 +15,11 @@ export interface CreateBotOptions {
 export function createBot(options: CreateBotOptions): Bot {
   const { botToken, miniAppUrl, backendApiBaseUrl, adminTelegramIds, t } = options;
   const bot = new Bot(botToken);
-  // Registered first so its /start hook runs before the normal one below —
-  // for admins it fully replaces that reply (does not call next()); for
-  // everyone else it calls next() so the normal start reply still fires.
-  registerAdminPanel(bot, { adminTelegramIds, backendApiBaseUrl, botToken, miniAppUrl, t });
+  // Registered first so its /start hook (admin-only, always calls next())
+  // runs before the normal start reply below, adding the admin panel's
+  // reply-keyboard entry point as an extra message rather than replacing
+  // the normal "open app" reply admins get like everyone else.
+  registerAdminPanel(bot, { adminTelegramIds, backendApiBaseUrl, botToken, t });
   registerStartCommand(bot, miniAppUrl, t);
   registerHelpCommand(bot, t);
   return bot;

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createI18n } from "../../../src/i18n/i18n.js";
 import {
   buildAdminMenuKeyboard,
-  buildAdminStartKeyboard,
+  buildAdminOnlyKeyboard,
   buildCancelKeyboard,
   isAdmin,
   resolveAudioExtension,
@@ -45,12 +45,11 @@ describe("resolveAudioExtension", () => {
   });
 });
 
-describe("buildAdminStartKeyboard", () => {
-  it("has a web_app button and the admin panel button, each on its own row", () => {
-    const keyboard = buildAdminStartKeyboard(t, "https://example.com/app");
+describe("buildAdminOnlyKeyboard", () => {
+  it("has a single reply-keyboard button with the panel label", () => {
+    const keyboard = buildAdminOnlyKeyboard(t);
 
-    expect(keyboard.keyboard[0]?.[0]).toMatchObject({ text: "Taklifnoma yaratish" });
-    expect(keyboard.keyboard[1]?.[0]).toEqual({ text: "🛠 Admin panel" });
+    expect(keyboard.keyboard[0]).toEqual([{ text: "🛠 Admin panel" }]);
   });
 });
 
